@@ -1,0 +1,388 @@
+{
+  "id": "5e32af95ecb2a1857e8b4568",
+  "category": "util",
+  "content": [
+    {
+      "content": [
+        {
+          "titleText": "How do you feel about Martin Viscarra's retirement?",
+          "voteMajorityStatusText": "Great, you are with the majority!",
+          "voteMinorityStatusText": "Great, here\u2019s what others think.",
+          "id": "c-1",
+          "order": 1,
+          "buttonText": "Happy",
+          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_03_happy.svg"
+        },
+        {
+          "id": "c-2",
+          "order": 2,
+          "buttonText": "Surprised",
+          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_26_surprised.svg"
+        },
+        {
+          "id": "c-3",
+          "order": 3,
+          "buttonText": "Broken",
+          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_16_broken.svg"
+        },
+        {
+          "id": "c-4",
+          "order": 4,
+          "buttonText": "Angry",
+          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_11_angry.svg"
+        }
+      ]
+    }
+  ],
+  "contentMeta": {
+    "options": {
+      "max": 1000,
+      "min": 1,
+      "free_user_limit": 3,
+      "notification": {
+        "min": "Please add at least one item!",
+        "max": "You reached the maximum number of items."
+      },
+      "mainAttribute": "buttonText",
+      "preview": "core/controls"
+    },
+    "input": {
+      "attribute": "buttonText",
+      "control": "core/controls/text",
+      "options": { "label": "Answer", "placeholder": "Add your answer here" }
+    },
+    "bulkEditor": {
+      "title": "Title Text",
+      "help_text": "Enter your question here.",
+      "attributes": [
+        "titleText",
+        "voteMajorityStatusText",
+        "voteMinorityStatusText",
+        "voteDeadlineOn",
+        "voteDeadlineTime",
+        "voteClosedStatusText"
+      ]
+    },
+    "attributes": {
+      "buttonText": { "control": "core/controls/text", "options": [] },
+      "emojiIcon": {
+        "control": "core/controls/dropdown",
+        "options": {
+          "label": "Emoji Image",
+          "help_text": "Select the desired answer.",
+          "default": "",
+          "options": [
+            { "label": "Empty", "value": "" },
+            {
+              "label": "Angry",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_11_angry.svg"
+            },
+            {
+              "label": "Broken",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_16_broken.svg"
+            },
+            {
+              "label": "Grinning Eyes",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_08_grinning_and_smile_eyes.svg"
+            },
+            {
+              "label": "Halo Smilling",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_30_halo_smile.svg"
+            },
+            {
+              "label": "Happy",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_03_happy.svg"
+            },
+            {
+              "label": "Joy Tears",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_06_joy_tears.svg"
+            },
+            {
+              "label": "Neutral",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_07_neutral.svg"
+            },
+            {
+              "label": "Surprised",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_26_surprised.svg"
+            },
+            {
+              "label": "Winkle Toungue",
+              "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_01_winkle_and_tongue.svg"
+            }
+          ]
+        }
+      },
+      "titleText": {
+        "control": "core/controls/text",
+        "options": {
+          "label": "Title",
+          "placeholder": "Add your question here",
+          "editable": false
+        }
+      },
+      "voteMajorityStatusText": {
+        "control": "core/controls/text",
+        "options": {
+          "label": "Majority Status",
+          "placeholder": "Add majority status text here",
+          "editable": false
+        }
+      },
+      "voteMinorityStatusText": {
+        "control": "core/controls/text",
+        "options": {
+          "label": "Minority Status",
+          "placeholder": "Add minority status text here",
+          "editable": false
+        }
+      },
+      "voteDeadlineOn": {
+        "control": "core/controls/toggle",
+        "access": 1,
+        "options": {
+          "label": "Closed Vote Timeframe",
+          "default": false,
+          "editable": false
+        }
+      },
+      "voteDeadlineTime": {
+        "if": { "voteDeadlineOn": true },
+        "control": "core/controls/date-time",
+        "options": {
+          "placeholder": "Add a date",
+          "help_text": "Select the time and date when the voting expires.",
+          "format": "Y/m/d H:i",
+          "label": "Closed Vote Deadline",
+          "editable": false
+        }
+      },
+      "voteClosedStatusText": {
+        "if": { "voteDeadlineOn": true },
+        "control": "core/controls/text",
+        "options": {
+          "label": "Closed Vote Status",
+          "placeholder": "Add your closed vote status text here",
+          "editable": false
+        }
+      }
+    }
+  },
+  "description": "Emoji Poll",
+  "module": "emoji-poll",
+  "name": "Emoji Poll",
+  "short_description": "Emoji Poll",
+  "skinMeta": {
+    "colorAttributes": ["backgroundColor", "textFillColor, linkFillColor"],
+    "tabs": {
+      "Interface": {
+        "layout": {
+          "control": "core/controls/dropdown",
+          "options": {
+            "label": "Layout",
+            "help_text": "Select the desired layout for your gallery.",
+            "default": "grid",
+            "options": [
+              { "label": "Grid", "value": "grid" },
+              { "label": "Slider", "value": "slider" }
+            ]
+          }
+        },
+        "backgroundColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color and transparency for the widget's background.",
+            "label": "Background Color",
+            "default": "#FFFFFF"
+          }
+        },
+        "borderSize": {
+          "control": "core/controls/stepper",
+          "options": {
+            "help_text": "Set the border thickness.",
+            "label": "Border Thickness",
+            "default": 0,
+            "unit": " px",
+            "min": 0,
+            "max": 100
+          }
+        },
+        "borderRadius": {
+          "control": "core/controls/stepper",
+          "options": {
+            "help_text": "Set the radius of the border.",
+            "label": "Border Radius",
+            "default": 0,
+            "unit": " px",
+            "min": 0,
+            "max": 100
+          }
+        },
+        "widgetPadding": {
+          "control": "core/controls/stepper",
+          "access": 1,
+          "options": {
+            "help_text": "Set the padding of the widget.",
+            "label": "Arround Padding",
+            "default": 3,
+            "unit": " px",
+            "min": 0,
+            "max": 300
+          }
+        },
+        "elementsPadding": {
+          "control": "core/controls/stepper",
+          "access": 1,
+          "options": {
+            "help_text": "Set the distance between the of the widget.",
+            "label": "Elements Padding",
+            "default": 3,
+            "unit": " px",
+            "min": 0,
+            "max": 300
+          }
+        },
+        "displayVotesNumber": {
+          "control": "core/controls/toggle",
+          "access": 1,
+          "options": {
+            "help_text": "If true, the votes number is displayed.",
+            "label": "Display Votes Number",
+            "default": false
+          }
+        }
+      },
+      "List": {
+        "displayPercentage": {
+          "control": "core/controls/toggle",
+          "access": 1,
+          "options": {
+            "help_text": "If true, the percentage is displayed on each answer.",
+            "label": "Display Percentage",
+            "default": false
+          }
+        },
+        "votesPrimaryColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color of votes level.",
+            "label": "Votes Primary Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "votesSecondaryColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color of your vote.",
+            "label": "Your Vote Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "textFont": {
+          "control": "core/controls/font",
+          "options": {
+            "label": "Text Font Style",
+            "help_text": "Set the text style.",
+            "family": "Roboto",
+            "style": "regular",
+            "size": { "default": 20, "unit": " px", "min": 8, "max": 100 },
+            "default": {
+              "family": "Roboto",
+              "style": "100",
+              "size": 20,
+              "source": "google",
+              "category": "sans-serif"
+            }
+          }
+        },
+        "textColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color and transparency for the text.",
+            "label": "Text Color",
+            "default": "#FFFFFF"
+          }
+        },
+        "itemsPadding": {
+          "control": "core/controls/stepper",
+          "options": {
+            "help_text": "Set the distance between any two emoji items.",
+            "label": "Items Padding",
+            "default": 3,
+            "unit": " px",
+            "min": 0,
+            "max": 300
+          }
+        },
+        "itemRadius": {
+          "control": "core/controls/stepper",
+          "options": {
+            "help_text": "Set the radius of the item.",
+            "label": "Items Radius",
+            "default": 0,
+            "unit": " px",
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    }
+  },
+  "skins": [
+    {
+      "id": "p1_5e32af95ecb2a1857e8b4568",
+      "name": "Theme 1",
+      "widget_id": "5e32af95ecb2a1857e8b4568",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "borderSize": 5,
+      "borderRadius": 5,
+      "layout": "grid",
+      "widgetPadding": 10,
+      "elementsPadding": 15,
+      "displayVotesNumber": true,
+      "displayPercentage": true,
+      "votesPrimaryColor": "#c9cdcf",
+      "votesSecondaryColor": "#35e66c",
+      "itemsPadding": 4,
+      "itemRadius": 5,
+      "textFont": {
+        "family": "Lato",
+        "style": "300",
+        "size": 17,
+        "source": "google",
+        "category": "sans-serif"
+      },
+      "textColor": "#333333"
+    },
+    {
+      "id": "p2_5e32af95ecb2a1857e8b4568",
+      "name": "Theme 2",
+      "widget_id": "5e32af95ecb2a1857e8b4568",
+      "backgroundColor": "rgb(255, 244, 255)",
+      "borderSize": 5,
+      "borderRadius": 0,
+      "layout": "grid",
+      "widgetPadding": 20,
+      "elementsPadding": 15,
+      "displayVotesNumber": true,
+      "displayPercentage": false,
+      "votesPrimaryColor": "#c9cdcf",
+      "votesSecondaryColor": "#35e66c",
+      "itemsPadding": 4,
+      "itemRadius": 0,
+      "textFont": {
+        "family": "Lato",
+        "style": "300",
+        "size": 17,
+        "source": "google",
+        "category": "sans-serif"
+      },
+      "textColor": "#333333"
+    }
+  ],
+  "slug": "Emoji Poll",
+  "tags": { "1": "vote, emoji slider, quiz, survey" },
+  "width": 530,
+  "height": 300,
+  "version": "364c5eb"
+}
+
