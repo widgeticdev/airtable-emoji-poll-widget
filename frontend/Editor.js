@@ -94,7 +94,10 @@ class Editor extends React.Component {
       return MyLoader
     } else {
       const EditorFrame = (
-        <Box display={visible ? 'block' : 'none'}>
+        <Box
+          display={visible ? 'block' : 'none'}
+          width="324px"
+        >
           {Object.keys(tabs).map((tab, index) =>
             this.generateTab(
               this.generateOnChange.bind(this),

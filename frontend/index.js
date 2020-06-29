@@ -28,15 +28,15 @@ function EmojiPollBlock () {
   return <>
     <Box
       display="flex"
-      flex-direction="row"
-      alignItems="center"
-      justifyContent="center">
+      justifyContent="center"
+      alignItems="flex-start">
+
+      <EmojiPoll />
 
       <Editor
       visible={isShowSettings}
       skinMeta={skinMeta} skin={skins[0]} />
 
-      <EmojiPoll />
     </Box>
   </>
 }
