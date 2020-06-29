@@ -15,11 +15,9 @@ class EmojiPoll extends Component {
     const target = this.clearTarget()
     this.retrieveCompositionId().then((compositionId) => {
       const child = document.createElement('widgetic-embed')
-      child.setAttribute('width', width)
-      child.setAttribute('height', height)
       child.setAttribute('id', compositionId)
       child.setAttribute('autoscale', 'on')
-      child.setAttribute('resize', 'fixed')
+      child.setAttribute('resize', 'fill')
       target.appendChild(child)
     })
     // setInterval(this.saveChanges(), 5000)
@@ -114,11 +112,7 @@ class EmojiPoll extends Component {
       blockID = shortid.generate()
       globalConfig.setAsync('id', blockID)
     }
-    return (
-      <>
-        <div id={blockID}></div>
-      </>
-    )
+    return (<div id={blockID} style={{width: '100%', height: '100%'}}></div>)
   }
 }
 
