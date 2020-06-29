@@ -25,8 +25,12 @@ function EmojiPollBlock () {
     }
     setIsShowSettings(!isShowSettings)
   })
-  return <>
+  return (
     <Box
+      className="widgetic-widget"
+      position="absolute"
+      width="100%"
+      height="100%"
       display="flex"
       justifyContent="center"
       alignItems="flex-start">
@@ -38,7 +42,7 @@ function EmojiPollBlock () {
       skinMeta={skinMeta} skin={skins[0]} />
 
     </Box>
-  </>
+  )
 }
 
 loadSDK.then(() => {
