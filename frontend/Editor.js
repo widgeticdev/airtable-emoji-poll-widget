@@ -87,30 +87,35 @@ class Editor extends React.Component {
   }
 
   render () {
-    const MyLoader = <Loader scale={0.3} />
     const { skinMeta, visible } = this.props
     const { tabs } = skinMeta
-    if (this.state.loading) {
-      return MyLoader
-    } else {
-      const EditorFrame = (
-        <Box
-          display={visible ? 'block' : 'none'}
-          width="324px"
-        >
-          {Object.keys(tabs).map((tab, index) =>
+
+    const EditorFrame = (
+      <Box
+        display={visible ? 'flex' : 'none'}
+        width='324px'
+        height='100%'
+        justifyContent='center'
+        alignItems='center'
+        backgroundColor='antiquewhite'
+      >
+        {
+          this.state.loading ?
+          <Loader scale={0.3} /> :
+          Object.keys(tabs).map((tab, index) =>
             this.generateTab(
               this.generateOnChange.bind(this),
               tab,
               tabs[tab],
               index
             )
-          )}
-        </Box>
-      )
-      return EditorFrame
-    }
-  }
-}
+          )
+        }
+      </Box>
+    )
 
+    return EditorFrame
+  }
+
+}
 export default Editor
