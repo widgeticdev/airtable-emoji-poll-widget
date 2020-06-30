@@ -5,13 +5,15 @@ import {
   useViewport,
   Box,
 } from "@airtable/blocks/ui";
-import { globalConfig } from "@airtable/blocks";
-import React, { useState } from "react";
-import EmojiPoll from "./EmojiPoll";
+import backend from "./backend";
+import { globalConfig, session } from "@airtable/blocks";
+import React, { useState, useEffect } from "react";
+import shortid from "shortid";
 import Editor from "./Editor";
-import { skinMeta, skins } from "./widget.json";
+import { id as widgetId, skins, content, skinMeta } from "./widget.json";
 
-function EmojiPollBlock() {
+function EmojiPoll() {
+  const [blockId, setBlockId] = useState(globalConfig.get('blockId') || shortid.generate())
   const [isShowSettings, setIsShowSettings] = useState(false);
   const viewport = useViewport();
   useSettingsButton(function () {
@@ -22,6 +24,125 @@ function EmojiPollBlock() {
     }
     setIsShowSettings(!isShowSettings);
   });
+  useEffect(() => {
+    const target = this.clearTarget();
+    const skin = globalConfig.get("skin");
+    retrieveCompositionId().then((compositionId) => {
+      window.Widgetic.UI.composition(target, compositionId, {
+        autoscale: "on",
+        resize: "fill",
+        skin,
+      });
+    });
+  })
+
+  const retrieveCompositionId = () => {
+    // if a composition has already been saved,
+    // returns it
+    // otherwise, creates one
+    return new Promise((resolve, reject) => {
+      const compId = globalConfig.get("compId");
+      if (compId) {
+        console.log("Found composition", compId);
+        resolve(compId);
+      } else {
+        console.log("creating new composition");
+        this.refreshToken()
+          .then((token) => {
+            console.log("refreshed the token: ", token);
+            // it has been set as an attribute
+            window.Widgetic.auth.token(token);
+            // create a composition
+            const orderedContent = content[0].content.map((val, index) => {
+              val.id = index + 1;
+              return val;
+            });
+            const composition = {
+              name: "My Composition",
+              content: orderedContent,
+              skin_id: skins[0].id,
+              widget_id: widgetId,
+            };
+            return window.Widgetic.api(
+              "compositions",
+              "POST",
+              JSON.stringify(composition)
+            );
+          })
+          .then((composition) => {
+            console.log("composition creation successful ", composition.id);
+            globalConfig.setAsync("compId", composition.id);
+            resolve(composition.id);
+          })
+          .catch((e) => reject(e));
+      }
+    });
+  }
+
+  const refreshToken = () => {
+    const currentUser = session.currentUser;
+    const accessToken = globalConfig.get("token");
+    const expires = globalConfig.get("expires");
+    return new Promise((resolve, reject) => {
+      if (accessToken && Date.now() < expires) {
+        // token's valid for another 30 minutes
+        console.log("found saved token", accessToken);
+        resolve(accessToken);
+      } else {
+        console.log("refreshing token");
+        console.log("currentUser", currentUser);
+        backend
+          .post("/block/auth", {
+            widgetId,
+            siteName: currentUser.id || "localhost",
+          })
+          .then(({ data }) => {
+            console.log("found data", data);
+            globalConfig.setAsync("token", data.token);
+            globalConfig.setAsync("expires", Date.now() + 86300000);
+            resolve(data.token);
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      }
+    });
+  }
+
+  const clearTarget = () => {
+    const blockID = globalConfig.get("id");
+    const target = document.getElementById(blockID);
+    if (target) {
+      target.innerHTML = "";
+      return target;
+    }
+  }
+
+  render() {
+    // const Settings = mapping()
+    let blockID = globalConfig.get("id");
+    if (!blockID) {
+      blockID = shortid.generate();
+      globalConfig.setAsync("id", blockID);
+    }
+    return (
+      <Box
+        className="widgetic-widget"
+        position="absolute"
+        width="100%"
+        height="100%"
+        display="flex"
+        justifyContent="center"
+        alignItems="flex-start"
+      >
+        <div id={blockID} style={{ width: "100%", height: "100%" }}></div>;
+        <Editor visible={this.state.isShowSettings} skinMeta={skinMeta} />
+      </Box>
+    );
+  }
+}
+
+function EmojiPollBlock() {
 
   return (
     <Box
@@ -49,5 +170,5 @@ loadScriptFromURLAsync(
   if (!globalConfig.get("skin")) {
     globalConfig.setAsync("skin", skins[0]);
   }
-  initializeBlock(() => <EmojiPollBlock />);
+  initializeBlock(() => <EmojiPoll />);
 });
