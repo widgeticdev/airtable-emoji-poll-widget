@@ -29,7 +29,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return ''
     case 'color':
       return (
-        <>
+        <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
           <p>{controlOptions.help_text}</p>
           <ColorPalette
@@ -41,11 +41,11 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
               onChangeFn(colorUtils.getHexForColor(allowedColors[newVal]))
             }}
           />
-        </>
+        </Box>
       )
     case 'dropdown':
       return (
-        <>
+        <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
           <p>{controlOptions.help_text}</p>
           <Select
@@ -55,7 +55,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
               onChangeFn(newVal)
             }}
           />
-        </>
+        </Box>
       )
     case 'image':
       return ''
@@ -94,7 +94,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return <></>
     case 'toggle':
       return (
-        <>
+        <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
           <p>{controlOptions.help_text}</p>
           <Switch
@@ -103,7 +103,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
               onChangeFn(newVal)
             }}
           />
-        </>
+        </Box>
       )
     case 'url':
       return <></>
