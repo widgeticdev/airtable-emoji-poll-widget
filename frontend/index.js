@@ -70,20 +70,17 @@ function EmojiPollBlock() {
     >
       <EmojiPoll />
 
-      <Editor visible={isShowSettings} skinMeta={skinMeta} skin={skins[0]} />
+      <Editor visible={isShowSettings} skinMeta={skinMeta} />
     </Box>
   );
 }
-
-loadSDK
-  .then(() => {
-    window.Widgetic.init(
-      "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
-      "https://airtable.widgetic.com/callback"
-    );
-    return refreshToken();
-  })
-  .then((token) => {
-    window.Widgetic.auth.token(token);
-    initializeBlock(() => <EmojiPollBlock />);
-  });
+loadScriptFromURLAsync(
+  "https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js"
+).then(() => {
+  window.Widgetic.init(
+    "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
+    "https://airtable.widgetic.com/callback"
+  );
+  globalConfig.setAsync("skin", skins[0]);
+  initializeBlock(() => <EmojiPollBlock />);
+});
