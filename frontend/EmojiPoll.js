@@ -9,43 +9,19 @@ class EmojiPoll extends Component {
     super(props);
     this.retrieveCompositionId = this.retrieveCompositionId.bind(this);
     this.refreshToken = this.refreshToken.bind(this);
-    this.generateOnChange = this.generateOnChange.bind(this);
   }
 
   componentDidMount() {
     const target = this.clearTarget();
+    const skin = globalConfig.get("skin");
     this.retrieveCompositionId().then((compositionId) => {
-      const child = document.createElement("widgetic-embed");
-      child.setAttribute("id", compositionId);
-      child.setAttribute("autoscale", "on");
-      child.setAttribute("resize", "fill");
-      target.appendChild(child);
+      window.Widgetic.UI.composition(target, compositionId, {
+        autoscale: "on",
+        resize: "fill",
+        skin,
+      });
     });
     // setInterval(this.saveChanges(), 5000)
-  }
-
-  generateOnChange(property) {
-    const w = window.Widgetic;
-    w.auth.token(globalConfig.get("token"));
-    const updateSkin = (newVal) => {
-      const presetSkinRegex = /^p[1-9]{1}_/;
-      const currentSkin = this.state.skin;
-      const skinId = currentSkin.id;
-      currentSkin[property] = newVal;
-      if (presetSkinRegex.test(skinId)) {
-        w.api("skins", "POST", JSON.stringify(currentSkin)).then((skin) => {
-          globalConfig.setAsync("skinId", skin.id);
-          this.setState({ skin });
-        });
-      } else {
-        w.api(`skins/${skinId}`, "PUT", JSON.stringify(currentSkin)).then(
-          (skin) => {
-            this.setState({ skin });
-          }
-        );
-      }
-    };
-    return updateSkin;
   }
 
   retrieveCompositionId() {

@@ -46,6 +46,8 @@ loadScriptFromURLAsync(
     "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
     "https://airtable.widgetic.com/callback"
   );
-  globalConfig.setAsync("skin", skins[0]);
+  if (!globalConfig.get("skin")) {
+    globalConfig.setAsync("skin", skins[0]);
+  }
   initializeBlock(() => <EmojiPollBlock />);
 });
