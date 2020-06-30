@@ -33,7 +33,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
         <Box marginTop="1rem">
 
           <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
-            <Label style={{marginBottom"0px"}}>{controlOptions.label}</Label>
+            <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
             <Tooltip
               content={controlOptions.help_text}
               placementX={Tooltip.placements.LEFT}
