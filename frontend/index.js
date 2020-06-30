@@ -3,28 +3,61 @@ import {
   loadScriptFromURLAsync,
   useSettingsButton,
   useViewport,
-  Box
-} from '@airtable/blocks/ui'
-import React, { useState } from 'react'
-import EmojiPoll from './EmojiPoll'
-import Editor from './Editor'
-import { skinMeta, skins } from './widget.json'
+  Box,
+} from "@airtable/blocks/ui";
+import { globalConfig, session } from "@airtable/blocks";
+import backend from "./backend";
+import React, { useState } from "react";
+import EmojiPoll from "./EmojiPoll";
+import Editor from "./Editor";
+import { skinMeta, skins, id as widgetId } from "./widget.json";
 
 const loadSDK = loadScriptFromURLAsync(
-  'https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js'
-)
+  "https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js"
+);
 
-function EmojiPollBlock () {
-  const [isShowSettings, setIsShowSettings] = useState(false)
-  const viewport = useViewport()
+const refreshToken = () => {
+  const currentUser = session.currentUser;
+  const accessToken = globalConfig.get("token");
+  const expires = globalConfig.get("expires");
+  return new Promise((resolve, reject) => {
+    if (accessToken && Date.now() < expires) {
+      // token's valid for another 30 minutes
+      console.log("found saved token", accessToken);
+      resolve(accessToken);
+    } else {
+      console.log("refreshing token");
+      console.log("currentUser", currentUser);
+      backend
+        .post("/block/auth", {
+          widgetId,
+          siteName: currentUser.id || "localhost",
+        })
+        .then(({ data }) => {
+          console.log("found data", data);
+          globalConfig.setAsync("token", data.token);
+          globalConfig.setAsync("expires", Date.now() + 86300000);
+          resolve(data.token);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    }
+  });
+};
+
+function EmojiPollBlock() {
+  const [isShowSettings, setIsShowSettings] = useState(false);
+  const viewport = useViewport();
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
-      viewport.exitFullscreen()
+      viewport.exitFullscreen();
     } else {
-      viewport.enterFullscreenIfPossible()
+      viewport.enterFullscreenIfPossible();
     }
-    setIsShowSettings(!isShowSettings)
-  })
+    setIsShowSettings(!isShowSettings);
+  });
+
   return (
     <Box
       className="widgetic-widget"
@@ -33,22 +66,24 @@ function EmojiPollBlock () {
       height="100%"
       display="flex"
       justifyContent="center"
-      alignItems="flex-start">
-
+      alignItems="flex-start"
+    >
       <EmojiPoll />
 
-      <Editor
-      visible={isShowSettings}
-      skinMeta={skinMeta} skin={skins[0]} />
-
+      <Editor visible={isShowSettings} skinMeta={skinMeta} skin={skins[0]} />
     </Box>
-  )
+  );
 }
 
-loadSDK.then(() => {
-  window.Widgetic.init(
-    '5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0',
-    'https://airtable.widgetic.com/callback'
-  )
-  initializeBlock(() => <EmojiPollBlock />)
-})
+loadSDK
+  .then(() => {
+    window.Widgetic.init(
+      "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
+      "https://airtable.widgetic.com/callback"
+    );
+    return refreshToken();
+  })
+  .then((token) => {
+    window.Widgetic.auth.token(token);
+    initializeBlock(() => <EmojiPollBlock />);
+  });
