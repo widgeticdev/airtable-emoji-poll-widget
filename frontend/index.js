@@ -13,7 +13,11 @@ import Editor from "./Editor";
 import { id as widgetId, skins, content, skinMeta } from "./widget.json";
 
 function EmojiPoll() {
-  const [blockId, setBlockId] = useState(globalConfig.get('blockId') || shortid.generate())
+  let blockID = globalConfig.get("id");
+  if (!blockID) {
+    blockID = shortid.generate();
+    globalConfig.setAsync("id", blockID);
+  }
   const [isShowSettings, setIsShowSettings] = useState(false);
   const viewport = useViewport();
   useSettingsButton(function () {
@@ -25,7 +29,7 @@ function EmojiPoll() {
     setIsShowSettings(!isShowSettings);
   });
   useEffect(() => {
-    const target = this.clearTarget();
+    const target = clearTarget();
     const skin = globalConfig.get("skin");
     retrieveCompositionId().then((compositionId) => {
       window.Widgetic.UI.composition(target, compositionId, {
@@ -34,7 +38,7 @@ function EmojiPoll() {
         skin,
       });
     });
-  })
+  });
 
   const retrieveCompositionId = () => {
     // if a composition has already been saved,
@@ -47,7 +51,7 @@ function EmojiPoll() {
         resolve(compId);
       } else {
         console.log("creating new composition");
-        this.refreshToken()
+        refreshToken()
           .then((token) => {
             console.log("refreshed the token: ", token);
             // it has been set as an attribute
@@ -77,7 +81,7 @@ function EmojiPoll() {
           .catch((e) => reject(e));
       }
     });
-  }
+  };
 
   const refreshToken = () => {
     const currentUser = session.currentUser;
@@ -107,7 +111,7 @@ function EmojiPoll() {
           });
       }
     });
-  }
+  };
 
   const clearTarget = () => {
     const blockID = globalConfig.get("id");
@@ -116,34 +120,9 @@ function EmojiPoll() {
       target.innerHTML = "";
       return target;
     }
-  }
+  };
 
-  render() {
-    // const Settings = mapping()
-    let blockID = globalConfig.get("id");
-    if (!blockID) {
-      blockID = shortid.generate();
-      globalConfig.setAsync("id", blockID);
-    }
-    return (
-      <Box
-        className="widgetic-widget"
-        position="absolute"
-        width="100%"
-        height="100%"
-        display="flex"
-        justifyContent="center"
-        alignItems="flex-start"
-      >
-        <div id={blockID} style={{ width: "100%", height: "100%" }}></div>;
-        <Editor visible={this.state.isShowSettings} skinMeta={skinMeta} />
-      </Box>
-    );
-  }
-}
-
-function EmojiPollBlock() {
-
+  // const Settings = mapping()
   return (
     <Box
       className="widgetic-widget"
@@ -154,8 +133,7 @@ function EmojiPollBlock() {
       justifyContent="center"
       alignItems="flex-start"
     >
-      <EmojiPoll />
-
+      <div id={blockID} style={{ width: "100%", height: "100%" }}></div>;
       <Editor visible={isShowSettings} skinMeta={skinMeta} />
     </Box>
   );
