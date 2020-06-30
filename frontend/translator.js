@@ -69,21 +69,24 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
     case 'slider':
     case 'stepper':
       return (
-        <>
+        <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
           <p>{controlOptions.help_text}</p>
-          <Input
-            value={controlOptions.default}
-            type="number"
-            min={0}
-            max={100}
-            step={1}
-            onChange={(e) => {
-              onChangeFn(e.targe.value)
-            }}
-          />
-          {controlOptions.unit}
-        </>
+          <div style={{display:"flex", alignItems: "center"}}>
+            <Input
+              value={controlOptions.default}
+              type="number"
+              min={0}
+              max={100}
+              step={1}
+              onChange={(e) => {
+                onChangeFn(e.targe.value)
+              }}
+            />
+            &nbsp;
+            <span>{controlOptions.unit}</span>
+          </div>
+        </Box>
       )
     case 'text':
       return <></>
