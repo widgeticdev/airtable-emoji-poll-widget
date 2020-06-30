@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Tooltip,
   ColorPalette,
   Input,
   Select,
@@ -30,8 +31,17 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
     case 'color':
       return (
         <Box marginTop="1rem">
-          <Label>{controlOptions.label}</Label>
-          <p>{controlOptions.help_text}</p>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
+            <Label style={{marginBottom"0px"}}>{controlOptions.label}</Label>
+            <Tooltip
+              content={controlOptions.help_text}
+              placementX={Tooltip.placements.LEFT}
+              placementY={Tooltip.placements.CENTER}>
+              <Button icon="info"/>
+            </Tooltip>
+          </Box>
+
           <ColorPalette
             color={currentValue}
             allowedColors={Object.keys(allowedColors).map(
@@ -47,7 +57,17 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return (
         <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
-          <p>{controlOptions.help_text}</p>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
+            <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
+            <Tooltip
+              content={controlOptions.help_text}
+              placementX={Tooltip.placements.LEFT}
+              placementY={Tooltip.placements.CENTER}>
+              <Button icon="info"/>
+            </Tooltip>
+          </Box>
+
           <Select
             value={controlOptions.default}
             options={controlOptions.options}
@@ -71,7 +91,17 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return (
         <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
-          <p>{controlOptions.help_text}</p>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
+            <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
+            <Tooltip
+              content={controlOptions.help_text}
+              placementX={Tooltip.placements.LEFT}
+              placementY={Tooltip.placements.CENTER}>
+              <Button icon="info"/>
+            </Tooltip>
+          </Box>
+
           <div style={{display:"flex", alignItems: "center"}}>
             <Input
               value={controlOptions.default}
@@ -96,7 +126,17 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return (
         <Box marginTop="1rem">
           <Label>{controlOptions.label}</Label>
-          <p>{controlOptions.help_text}</p>
+
+          <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
+            <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
+            <Tooltip
+              content={controlOptions.help_text}
+              placementX={Tooltip.placements.LEFT}
+              placementY={Tooltip.placements.CENTER}>
+              <Button icon="info"/>
+            </Tooltip>
+          </Box>
+
           <Switch
             value={controlOptions.default}
             onChange={(newVal) => {
