@@ -56,7 +56,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
               (color) => colors[color]
             )}
             onChange={(newVal) => {
-              onChangeFn(colorUtils.getHexForColor(allowedColors[newVal]));
+              onChangeFn(colorUtils.getHexForColor(newVal));
             }}
           />
         </Box>

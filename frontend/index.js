@@ -5,46 +5,11 @@ import {
   useViewport,
   Box,
 } from "@airtable/blocks/ui";
-import { globalConfig, session } from "@airtable/blocks";
-import backend from "./backend";
+import { globalConfig } from "@airtable/blocks";
 import React, { useState } from "react";
 import EmojiPoll from "./EmojiPoll";
 import Editor from "./Editor";
-import { skinMeta, skins, id as widgetId } from "./widget.json";
-
-const loadSDK = loadScriptFromURLAsync(
-  "https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js"
-);
-
-const refreshToken = () => {
-  const currentUser = session.currentUser;
-  const accessToken = globalConfig.get("token");
-  const expires = globalConfig.get("expires");
-  return new Promise((resolve, reject) => {
-    if (accessToken && Date.now() < expires) {
-      // token's valid for another 30 minutes
-      console.log("found saved token", accessToken);
-      resolve(accessToken);
-    } else {
-      console.log("refreshing token");
-      console.log("currentUser", currentUser);
-      backend
-        .post("/block/auth", {
-          widgetId,
-          siteName: currentUser.id || "localhost",
-        })
-        .then(({ data }) => {
-          console.log("found data", data);
-          globalConfig.setAsync("token", data.token);
-          globalConfig.setAsync("expires", Date.now() + 86300000);
-          resolve(data.token);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    }
-  });
-};
+import { skinMeta, skins } from "./widget.json";
 
 function EmojiPollBlock() {
   const [isShowSettings, setIsShowSettings] = useState(false);

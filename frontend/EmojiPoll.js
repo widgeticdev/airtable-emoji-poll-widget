@@ -9,6 +9,7 @@ class EmojiPoll extends Component {
     super(props);
     this.retrieveCompositionId = this.retrieveCompositionId.bind(this);
     this.refreshToken = this.refreshToken.bind(this);
+    this.generateOnChange = this.generateOnChange.bind(this);
   }
 
   componentDidMount() {
@@ -21,6 +22,30 @@ class EmojiPoll extends Component {
       target.appendChild(child);
     });
     // setInterval(this.saveChanges(), 5000)
+  }
+
+  generateOnChange(property) {
+    const w = window.Widgetic;
+    w.auth.token(globalConfig.get("token"));
+    const updateSkin = (newVal) => {
+      const presetSkinRegex = /^p[1-9]{1}_/;
+      const currentSkin = this.state.skin;
+      const skinId = currentSkin.id;
+      currentSkin[property] = newVal;
+      if (presetSkinRegex.test(skinId)) {
+        w.api("skins", "POST", JSON.stringify(currentSkin)).then((skin) => {
+          globalConfig.setAsync("skinId", skin.id);
+          this.setState({ skin });
+        });
+      } else {
+        w.api(`skins/${skinId}`, "PUT", JSON.stringify(currentSkin)).then(
+          (skin) => {
+            this.setState({ skin });
+          }
+        );
+      }
+    };
+    return updateSkin;
   }
 
   retrieveCompositionId() {

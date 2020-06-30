@@ -4,14 +4,6 @@ import { Box, Heading } from "@airtable/blocks/ui";
 import mapping from "./translator";
 
 class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      skin: {},
-    };
-  }
-
   generateTab(generateOnChange, tabName, controls, index) {
     // tab is an object straight out of widget skinMeta
     return (
@@ -34,20 +26,23 @@ class Editor extends React.Component {
     w.auth.token(globalConfig.get("token"));
     const updateSkin = (newVal) => {
       const presetSkinRegex = /^p[1-9]{1}_/;
-      const currentSkin = this.state.skin;
+      const currentSkin = globalConfig.get("skin");
       const skinId = currentSkin.id;
       currentSkin[property] = newVal;
       if (presetSkinRegex.test(skinId)) {
         w.api("skins", "POST", JSON.stringify(currentSkin)).then((skin) => {
-          globalConfig.setAsync("skinId", skin.id);
-          this.setState({ skin });
+          globalConfig.setAsync("skin", skin);
+          const composition = w.find(globalConfig.get("compId")).composition;
+          composition.setSkin(currentSkin);
         });
       } else {
-        w.api(`skins/${skinId}`, "PUT", JSON.stringify(currentSkin)).then(
-          (skin) => {
-            this.setState({ skin });
-          }
-        );
+        const resourceUrl = "skins/" + skinId;
+        w.api(resourceUrl, "PUT", JSON.stringify(currentSkin)).then((skin) => {
+          console.log("apparently updated skin");
+          globalConfig.setAsync("skin", skin);
+          const composition = w.find(globalConfig.get("compId")).composition;
+          composition.setSkin(currentSkin);
+        });
       }
     };
     return updateSkin;
@@ -56,7 +51,7 @@ class Editor extends React.Component {
   generateControl(generateOnChange, propertyName, controlOptions, index) {
     const control = controlOptions.control.split("/")[2];
     const onChange = generateOnChange(propertyName);
-    const values = this.state.skin;
+    const values = globalConfig.get("skin");
     const controlValues = values[control];
     const InputController = mapping(
       onChange,
