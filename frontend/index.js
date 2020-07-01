@@ -44,7 +44,7 @@ function EmojiPoll() {
   useEffect(() => {
     const target = clearTarget();
     window.Widgetic.UI.composition(target, compositionId, {
-      autoscale: "on",
+      autoscale: "off",
       resize: "fill",
       skin,
     });
@@ -70,7 +70,7 @@ function EmojiPoll() {
       justifyContent="center"
       alignItems="flex-start"
     >
-      <div id={blockID} style={{ width: "100%", height: "100%" }}></div>;
+      <div id={blockID} style={{ width: "100%", height: "100%" }}></div>
       <Editor visible={isShowSettings} skinMeta={skinMeta} />
     </Box>
   );
