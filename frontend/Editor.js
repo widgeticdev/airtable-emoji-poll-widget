@@ -30,9 +30,7 @@ class Editor extends React.Component {
   generateTab (generateOnChange, tabName, controls, index) {
     // tab is an object straight out of widget skinMeta
     return (
-      <Box key={parseInt(index)}
-        padding='1rem'>
-        <Heading>{tabName}</Heading>
+      <Box key={parseInt(index)} paddingLeft='1rem' paddingRight='1rem'>
         {Object.keys(controls).map((control, index2) =>
           this.generateControl(
             generateOnChange,
@@ -98,6 +96,7 @@ class Editor extends React.Component {
         display={visible ? 'block' : 'none'}
         backgroundColor='rgb(250, 250, 250)'
         overflowY='auto'
+        paddingBottom='1rem'
       >
         <Box
           display='flex'
