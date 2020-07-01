@@ -5,6 +5,7 @@ import {
   ColorPalette,
   Input,
   Select,
+  SelectButtons,
   Text,
   Switch,
   TextButton,
@@ -67,12 +68,11 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
             </Tooltip>
           </Box>
 
-          <Select
+          <SelectButtons
             value={controlOptions.default}
+            onChange={(newVal) => onChangeFn(newVal)}
             options={controlOptions.options}
-            onChange={(newVal) => {
-              onChangeFn(newVal)
-            }}
+            size="large"
           />
         </Box>
       )
