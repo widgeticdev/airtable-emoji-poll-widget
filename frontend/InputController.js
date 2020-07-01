@@ -143,16 +143,11 @@ const InputController = (props) => {
     case "toggle": {
       const MySwitch = () => {
         const [isEnabled, setIsEnabled] = useState(currentValue);
-        const myChangeFn = (newVal) => {
-          onChangeFn(newVal);
-          return setIsEnabled(newVal);
-        };
         return (
           <Switch
             value={isEnabled}
             onChange={(newVal) => {
               onChangeFn(newVal);
-              console.log("hello world");
               return setIsEnabled(newVal);
             }}
           />

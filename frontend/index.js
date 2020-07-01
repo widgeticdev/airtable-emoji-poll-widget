@@ -4,33 +4,37 @@ import {
   useSettingsButton,
   useViewport,
   Box,
-  useGlobalConfig,
 } from "@airtable/blocks/ui";
 import backend from "./backend";
 import { globalConfig, session, base } from "@airtable/blocks";
 import React, { useState, useEffect } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
-import {
-  id as widgetId,
-  skins,
-  content,
-  contentMeta,
-  skinMeta,
-} from "./widget.json";
-const compositionId = "5efba5c5ecb2a19c168b4567";
+import { skins, content, contentMeta, skinMeta } from "./widget.json";
 
 function EmojiPoll() {
-  const globalConfigSyn = useGlobalConfig();
+  let compositionId = globalConfig.get("compId");
+  if (!compositionId) {
+    globalConfig.setAsync("compId", "5efba5c5ecb2a19c168b4567");
+    compositionId = globalConfig.get("compId");
+  }
+  const skin = globalConfig.get("skin");
+  if (!skin) {
+    globalConfig.setAsync("skin", skins[0]);
+  }
   let blockID = globalConfig.get("id");
   if (!blockID) {
     blockID = shortid.generate();
     globalConfig.setAsync("id", blockID);
   }
-  const skin = globalConfigSyn.get("skin");
-  if (!skin) {
-    globalConfigSyn.setAsync("skin", skins[0]);
-  }
+  // useEffect(() => {
+  //   const target = document.getElementById(blockID);
+  //   target.innerHTML = "";
+  //   const child = document.createElement("widgetic-embed");
+  //   child.setAttribute("id", compositionId);
+  //   child.setAttribute("resize", "fill");
+  //   target.appendChild(child);
+  // });
   const [isShowSettings, setIsShowSettings] = useState(false);
   const viewport = useViewport();
   useSettingsButton(function () {
@@ -41,25 +45,6 @@ function EmojiPoll() {
     }
     setIsShowSettings(!isShowSettings);
   });
-  useEffect(() => {
-    const target = clearTarget();
-    window.Widgetic.UI.composition(target, compositionId, {
-      autoscale: "off",
-      resize: "fill",
-      skin,
-    });
-  });
-
-  const clearTarget = () => {
-    const blockID = globalConfig.get("id");
-    const target = document.getElementById(blockID);
-    if (target) {
-      target.innerHTML = "";
-      return target;
-    }
-  };
-
-  // const Settings = mapping()
   return (
     <Box
       className="widgetic-widget"
@@ -70,7 +55,9 @@ function EmojiPoll() {
       justifyContent="center"
       alignItems="flex-start"
     >
-      <div id={blockID} style={{ width: "100%", height: "100%" }}></div>
+      <div id={blockID} style={{ width: "100%", height: "100%" }}>
+        <widgetic-embed id={compositionId}></widgetic-embed>
+      </div>
       <Editor visible={isShowSettings} skinMeta={skinMeta} />
     </Box>
   );

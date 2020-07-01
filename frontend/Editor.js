@@ -1,6 +1,6 @@
 import React from "react";
 import { globalConfig } from "@airtable/blocks";
-import { Box, useGlobalConfig } from "@airtable/blocks/ui";
+import { Box } from "@airtable/blocks/ui";
 import InputController from "./InputController";
 
 function Editor(props) {
@@ -14,12 +14,14 @@ function Editor(props) {
       </Box>
     );
   };
-  const globalConfigSyn = useGlobalConfig();
 
   const generateOnChange = (property) => {
     const updateSkin = (newVal) => {
-      const currentSkin = globalConfigSyn.get("skin");
+      const currentSkin = globalConfig.get("skin");
       currentSkin[property] = newVal;
+      const composition = window.Widgetic.find(globalConfig.get("compId"))
+        .composition;
+      composition.setSkin(currentSkin);
       globalConfig.setAsync("skin", currentSkin);
     };
     return updateSkin;
