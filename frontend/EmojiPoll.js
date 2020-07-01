@@ -16,7 +16,7 @@ class EmojiPoll extends Component {
     this.retrieveCompositionId().then((compositionId) => {
       const child = document.createElement("widgetic-embed");
       child.setAttribute("id", compositionId);
-      child.setAttribute("autoscale", "on");
+      child.setAttribute("autoscale", "off");
       child.setAttribute("resize", "fill");
       target.appendChild(child);
     });
