@@ -11,6 +11,7 @@ import {
 } from "@airtable/blocks/ui";
 import React, { useState } from "react";
 import allowedColors from "./allowedColors";
+import hexColors from "./hexColors";
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -20,6 +21,7 @@ function capitalizeFirstLetter(str) {
   onChangeFn, control, controlOptions, currentValue, index
   */
 const InputController = (props) => {
+  console.log("hexColors[String(currentValue)]", hexColors);
   const { control, controlOptions, onChangeFn, currentValue } = props;
   switch (control) {
     case "date-time":
@@ -54,7 +56,7 @@ const InputController = (props) => {
           </Box>
 
           <ColorPalette
-            color={currentValue}
+            color={hexColors[String(currentValue)]}
             allowedColors={Object.keys(allowedColors).map(
               (color) => colors[color]
             )}
