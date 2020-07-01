@@ -35,11 +35,11 @@ function EmojiPoll() {
   const viewport = useViewport();
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
-      viewport.exitFullscreen();
+      setIsShowSettings(isShowSettings ? false : true);
     } else {
       viewport.enterFullscreenIfPossible();
+      setIsShowSettings(true);
     }
-    setIsShowSettings(!isShowSettings);
   });
   useEffect(() => {
     const target = clearTarget();
