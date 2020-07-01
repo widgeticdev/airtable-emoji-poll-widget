@@ -21,7 +21,6 @@ function capitalizeFirstLetter(str) {
   onChangeFn, control, controlOptions, currentValue, index
   */
 const InputController = (props) => {
-  console.log("hexColors[String(currentValue)]", hexColors);
   const { control, controlOptions, onChangeFn, currentValue } = props;
   switch (control) {
     case "date-time":

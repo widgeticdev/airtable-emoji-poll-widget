@@ -4,6 +4,7 @@ import { Box } from "@airtable/blocks/ui";
 import InputController from "./InputController";
 
 function Editor(props) {
+  const { setSkin } = props;
   const generateTab = (generateOnChange, tabName, controls, index) => {
     // tab is an object straight out of widget skinMeta
     return (
@@ -19,9 +20,7 @@ function Editor(props) {
     const updateSkin = (newVal) => {
       const currentSkin = globalConfig.get("skin");
       currentSkin[property] = newVal;
-      const composition = window.Widgetic.find(globalConfig.get("compId"))
-        .composition;
-      composition.setSkin(currentSkin);
+      setSkin(currentSkin);
       globalConfig.setAsync("skin", currentSkin);
     };
     return updateSkin;
