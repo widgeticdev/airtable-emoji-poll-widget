@@ -51,7 +51,7 @@ function Editor(props) {
 
   const EditorFrame = (
     <Box
-      width="324px"
+      width="325px"
       height="100%"
       display={visible ? "block" : "none"}
       backgroundColor="rgb(250, 250, 250)"
