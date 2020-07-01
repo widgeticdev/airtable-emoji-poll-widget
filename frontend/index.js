@@ -4,7 +4,6 @@ import {
   useSettingsButton,
   useViewport,
   Box,
-  useGlobalConfig,
 } from "@airtable/blocks/ui";
 import backend from "./backend";
 import { globalConfig, session, base } from "@airtable/blocks";
