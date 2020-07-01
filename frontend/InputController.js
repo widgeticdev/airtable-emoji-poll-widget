@@ -3,20 +3,25 @@ import {
   Button,
   Tooltip,
   ColorPalette,
+  Input,
+  Select,
   SelectButtons,
+  Text,
   Switch,
+  TextButton,
+  Link,
   Label,
   colors,
   colorUtils,
 } from "@airtable/blocks/ui";
-import React, { useState } from "react";
+import React from "react";
 import allowedColors from "./allowedColors";
 
-/* props has
-  onChangeFn, control, controlOptions, currentValue, index
-  */
-const InputController = (props) => {
-  const { control, controlOptions, onChangeFn, currentValue } = props;
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
   switch (control) {
     case "date-time":
       return <></>;
@@ -38,7 +43,7 @@ const InputController = (props) => {
             marginBottom=".25rem"
           >
             <Label style={{ marginBottom: "0px" }}>
-              {controlOptions.label}
+              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
             </Label>
             <Tooltip
               content={controlOptions.help_text}
@@ -50,6 +55,7 @@ const InputController = (props) => {
           </Box>
 
           <ColorPalette
+            key={String(index)}
             color={currentValue}
             allowedColors={Object.keys(allowedColors).map(
               (color) => colors[color]
@@ -70,7 +76,7 @@ const InputController = (props) => {
             marginBottom=".25rem"
           >
             <Label style={{ marginBottom: "0px" }}>
-              {controlOptions.label}
+              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
             </Label>
             <Tooltip
               content={controlOptions.help_text}
@@ -82,7 +88,8 @@ const InputController = (props) => {
           </Box>
 
           <SelectButtons
-            value={currentValue}
+            key={String(index)}
+            value={controlOptions.default}
             onChange={(newVal) => onChangeFn(newVal)}
             options={controlOptions.options}
             size="large"
@@ -109,7 +116,7 @@ const InputController = (props) => {
             marginBottom=".25rem"
           >
             <Label style={{ marginBottom: "0px" }}>
-              {controlOptions.label}
+              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
             </Label>
             <Tooltip
               content={controlOptions.help_text}
@@ -121,14 +128,15 @@ const InputController = (props) => {
           </Box>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-            <input
-              value={parseInt(currentValue)}
+            <Input
+              key={String(index)}
+              value={controlOptions.default}
               type="number"
               min={0}
               max={100}
               step={1}
               onChange={(e) => {
-                onChangeFn(parseInt(e.target.value));
+                onChangeFn(e.target.value);
               }}
             />
             &nbsp;
@@ -140,24 +148,7 @@ const InputController = (props) => {
       return <></>;
     case "textarea":
       return <></>;
-    case "toggle": {
-      const MySwitch = () => {
-        const [isEnabled, setIsEnabled] = useState(currentValue);
-        const myChangeFn = (newVal) => {
-          onChangeFn(newVal);
-          return setIsEnabled(newVal);
-        };
-        return (
-          <Switch
-            value={isEnabled}
-            onChange={(newVal) => {
-              onChangeFn(newVal);
-              console.log("hello world");
-              return setIsEnabled(newVal);
-            }}
-          />
-        );
-      };
+    case "toggle":
       return (
         <Box marginTop="1rem">
           <Box
@@ -167,7 +158,7 @@ const InputController = (props) => {
             marginBottom=".25rem"
           >
             <Label style={{ marginBottom: "0px" }}>
-              {controlOptions.label}
+              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
             </Label>
             <Tooltip
               content={controlOptions.help_text}
@@ -177,10 +168,16 @@ const InputController = (props) => {
               <Button icon="info" aria-label="info" />
             </Tooltip>
           </Box>
-          <MySwitch />
+
+          <Switch
+            key={String(index)}
+            value={controlOptions.default}
+            onChange={(newVal) => {
+              onChangeFn(newVal);
+            }}
+          />
         </Box>
       );
-    }
     case "url":
       return <></>;
     case "video":
@@ -188,4 +185,4 @@ const InputController = (props) => {
   }
 };
 
-export default InputController;
+export default mapping;
