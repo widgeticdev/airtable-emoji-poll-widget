@@ -33,39 +33,20 @@ const InputController = (props) => {
       return "";
     case "browser":
       return "";
-    case "color":
-      return (
-        <Box marginTop="1rem">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom=".25rem"
-          >
-            <Label style={{ marginBottom: "0px" }}>
-              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
-            </Label>
-            <Tooltip
-              content={controlOptions.help_text}
-              placementX={Tooltip.placements.LEFT}
-              placementY={Tooltip.placements.CENTER}
-            >
-              <Button icon="info" aria-label="info" />
-            </Tooltip>
-          </Box>
-
+    case "color": {
+      const ColorPicker = () => {
+        const [color, setColor] = useState(hexColors[String(currentValue)]);
+        return (
           <ColorPalette
-            color={hexColors[String(currentValue)]}
-            allowedColors={Object.keys(allowedColors).map(
-              (color) => colors[color]
-            )}
+            color={color}
+            allowedColors={Object.keys(allowedColors).map((col) => colors[col])}
             onChange={(newVal) => {
               onChangeFn(colorUtils.getHexForColor(newVal));
+              return setColor(newVal);
             }}
           />
-        </Box>
-      );
-    case "dropdown":
+        );
+      };
       return (
         <Box marginTop="1rem">
           <Box
@@ -86,14 +67,48 @@ const InputController = (props) => {
             </Tooltip>
           </Box>
 
+          <ColorPicker />
+        </Box>
+      );
+    }
+    case "dropdown": {
+      const MySelectButtons = () => {
+        const [value, setValue] = useState(currentValue);
+        return (
           <SelectButtons
-            value={currentValue}
-            onChange={(newVal) => onChangeFn(newVal)}
+            value={value}
+            onChange={(newVal) => {
+              onChangeFn(newVal);
+              return setValue(newVal);
+            }}
             options={controlOptions.options}
             size="large"
           />
+        );
+      };
+      return (
+        <Box marginTop="1rem">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            marginBottom=".25rem"
+          >
+            <Label style={{ marginBottom: "0px" }}>
+              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+            </Label>
+            <Tooltip
+              content={controlOptions.help_text}
+              placementX={Tooltip.placements.LEFT}
+              placementY={Tooltip.placements.CENTER}
+            >
+              <Button icon="info" aria-label="info" />
+            </Tooltip>
+            <MySelectButtons />
+          </Box>
         </Box>
       );
+    }
     case "image":
       return "";
     case "orderPicker":
@@ -104,7 +119,23 @@ const InputController = (props) => {
       return "";
     case "range":
     case "slider":
-    case "stepper":
+    case "stepper": {
+      const NumberInput = () => {
+        const [value, setValue] = useState(currentValue);
+        return (
+          <input
+            value={parseInt(value)}
+            type="number"
+            min={0}
+            max={100}
+            step={1}
+            onChange={(e) => {
+              onChangeFn(parseInt(e.target.value));
+              return setValue(parseInt(event.target.value));
+            }}
+          />
+        );
+      };
       return (
         <Box marginTop="1rem">
           <Box
@@ -126,21 +157,13 @@ const InputController = (props) => {
           </Box>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-            <input
-              value={parseInt(currentValue)}
-              type="number"
-              min={0}
-              max={100}
-              step={1}
-              onChange={(e) => {
-                onChangeFn(parseInt(e.target.value));
-              }}
-            />
+            <NumberInput />
             &nbsp;
             <span>{controlOptions.unit}</span>
           </div>
         </Box>
       );
+    }
     case "text":
       return <></>;
     case "textarea":

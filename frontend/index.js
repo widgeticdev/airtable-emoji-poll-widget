@@ -60,7 +60,11 @@ class EmojiPoll extends React.Component {
         alignItems="flex-start"
       >
         <div id={blockID} style={{ width: "100%", height: "100%" }}></div>
-        <Editor visible={true} skinMeta={skinMeta} setSkin={this.setSkin} />
+        <Editor
+          visible={this.props.isEditorVisible}
+          skinMeta={skinMeta}
+          setSkin={this.setSkin}
+        />
       </Box>
     );
   }
@@ -69,35 +73,27 @@ class EmojiPoll extends React.Component {
 function EmojiPollBlock() {
   // Block viewport
   const viewport = useViewport();
-  let isEditorVisible = false;
+  const [editorVisible, setEditorVisible] = useState(false);
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
-      isEditorVisible = isEditorVisible ? false : true;
+      setEditorVisible(!editorVisible);
     } else {
       viewport.enterFullscreenIfPossible();
-      isEditorVisible = true;
+      setEditorVisible(true);
     }
   });
 
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {
-    if (!viewport._isFullscreen && isEditorVisible) isEditorVisible = false;
+    if (!viewport._isFullscreen && editorVisible) {
+      setEditorVisible(false);
+    }
     // console.log("isEditorVisible after exit fullscreen:", isEditorVisible);}
   });
 
-  // create the Widgetic composition inside the Block
-  // const clearTarget = () => {
-  //   const blockID = globalConfig.get("id");
-  //   const target = document.getElementById(blockID);
-  //   if (target) {
-  //     target.innerHTML = "";
-  //     return target;
-  //   }
-  // };
-
   // Block HTML template
-  return <EmojiPoll />;
+  return <EmojiPoll isEditorVisible={editorVisible} />;
 }
 
 loadScriptFromURLAsync(
@@ -110,5 +106,5 @@ loadScriptFromURLAsync(
   if (!globalConfig.get("skin")) {
     globalConfig.setAsync("skin", skins[0]);
   }
-  initializeBlock(() => <EmojiPoll />);
+  initializeBlock(() => <EmojiPollBlock />);
 });
