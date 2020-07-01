@@ -3,25 +3,24 @@ import {
   Button,
   Tooltip,
   ColorPalette,
-  Input,
-  Select,
   SelectButtons,
-  Text,
   Switch,
-  TextButton,
-  Link,
   Label,
   colors,
   colorUtils,
 } from "@airtable/blocks/ui";
-import React from "react";
+import React, { useState } from "react";
 import allowedColors from "./allowedColors";
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
+/* props has
+  onChangeFn, control, controlOptions, currentValue, index
+  */
+const InputController = (props) => {
+  const { control, controlOptions, onChangeFn, currentValue } = props;
   switch (control) {
     case "date-time":
       return <></>;
@@ -55,7 +54,6 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
           </Box>
 
           <ColorPalette
-            key={String(index)}
             color={currentValue}
             allowedColors={Object.keys(allowedColors).map(
               (color) => colors[color]
@@ -88,8 +86,7 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
           </Box>
 
           <SelectButtons
-            key={String(index)}
-            value={controlOptions.default}
+            value={currentValue}
             onChange={(newVal) => onChangeFn(newVal)}
             options={controlOptions.options}
             size="large"
@@ -128,15 +125,14 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
           </Box>
 
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Input
-              key={String(index)}
-              value={controlOptions.default}
+            <input
+              value={parseInt(currentValue)}
               type="number"
               min={0}
               max={100}
               step={1}
               onChange={(e) => {
-                onChangeFn(e.target.value);
+                onChangeFn(parseInt(e.target.value));
               }}
             />
             &nbsp;
@@ -148,7 +144,24 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
       return <></>;
     case "textarea":
       return <></>;
-    case "toggle":
+    case "toggle": {
+      const MySwitch = () => {
+        const [isEnabled, setIsEnabled] = useState(currentValue);
+        const myChangeFn = (newVal) => {
+          onChangeFn(newVal);
+          return setIsEnabled(newVal);
+        };
+        return (
+          <Switch
+            value={isEnabled}
+            onChange={(newVal) => {
+              onChangeFn(newVal);
+              console.log("hello world");
+              return setIsEnabled(newVal);
+            }}
+          />
+        );
+      };
       return (
         <Box marginTop="1rem">
           <Box
@@ -168,16 +181,10 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
               <Button icon="info" aria-label="info" />
             </Tooltip>
           </Box>
-
-          <Switch
-            key={String(index)}
-            value={controlOptions.default}
-            onChange={(newVal) => {
-              onChangeFn(newVal);
-            }}
-          />
+          <MySwitch />
         </Box>
       );
+    }
     case "url":
       return <></>;
     case "video":
@@ -185,4 +192,4 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
   }
 };
 
-export default mapping;
+export default InputController;
