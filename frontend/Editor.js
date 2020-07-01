@@ -1,13 +1,13 @@
 import React from "react";
 import { globalConfig } from "@airtable/blocks";
-import { Box, Heading, useGlobalConfig } from "@airtable/blocks/ui";
-import mapping from "./translator";
+import { Box, useGlobalConfig } from "@airtable/blocks/ui";
+import InputController from "./InputController";
 
 function Editor(props) {
   const generateTab = (generateOnChange, tabName, controls, index) => {
     // tab is an object straight out of widget skinMeta
     return (
-      <Box key={parseInt(index)} paddingLeft='1rem' paddingRight='1rem'>
+      <Box key={parseInt(index)} paddingLeft="1rem" paddingRight="1rem">
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
@@ -35,14 +35,15 @@ function Editor(props) {
     const onChange = generateOnChange(propertyName);
     const values = globalConfig.get("skin");
     const controlValues = values[control];
-    const InputController = mapping(
-      onChange,
-      control,
-      controlOptions.options,
-      controlValues,
-      index
+    return (
+      <InputController
+        key={String(index)}
+        onChangeFn={onChange}
+        control={control}
+        controlOptions={controlOptions.options}
+        controlValues={controlValues}
+      />
     );
-    return InputController;
   };
 
   const { skinMeta, visible } = props;
@@ -55,7 +56,7 @@ function Editor(props) {
       display={visible ? "block" : "none"}
       backgroundColor="rgb(250, 250, 250)"
       overflowY="auto"
-        paddingBottom='1rem'
+      paddingBottom="1rem"
     >
       <Box
         display="flex"
