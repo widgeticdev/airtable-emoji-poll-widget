@@ -34,14 +34,14 @@ function Editor(props) {
     const control = controlOptions.control.split("/")[2];
     const onChange = generateOnChange(propertyName);
     const values = globalConfig.get("skin");
-    const controlValues = values[control];
+    const currentValue = values[propertyName];
     return (
       <InputController
         key={String(index)}
         onChangeFn={onChange}
         control={control}
         controlOptions={controlOptions.options}
-        controlValues={controlValues}
+        currentValue={currentValue}
       />
     );
   };
