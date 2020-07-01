@@ -56,7 +56,6 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
     case 'dropdown':
       return (
         <Box marginTop="1rem">
-          <Label>{controlOptions.label}</Label>
 
           <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
             <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
@@ -90,7 +89,6 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
     case 'stepper':
       return (
         <Box marginTop="1rem">
-          <Label>{controlOptions.label}</Label>
 
           <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
             <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
@@ -125,7 +123,6 @@ const mapping = (onChangeFn, control, controlOptions, currentValue, index) => {
     case 'toggle':
       return (
         <Box marginTop="1rem">
-          <Label>{controlOptions.label}</Label>
 
           <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom=".25rem">
             <Label style={{marginBottom:"0px"}}>{controlOptions.label}</Label>
