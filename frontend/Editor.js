@@ -1,6 +1,6 @@
 import React from "react";
 import { globalConfig } from "@airtable/blocks";
-import { Box, Heading } from "@airtable/blocks/ui";
+import { Box, Heading, Button } from "@airtable/blocks/ui";
 import InputController from "./InputController";
 
 function Editor(props) {
@@ -56,19 +56,41 @@ function Editor(props) {
       height="100%"
       display={visible ? "block" : "none"}
       backgroundColor="rgb(250, 250, 250)"
-      overflowY="auto"
+      display="flex"
+      flexDirection="column"
+      overflow="hidden"
     >
+      <Box overflowY="auto">
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          padding="1rem"
+        >
+          <Heading width="100%">Emoji Poll settings</Heading>
+          {Object.keys(tabs).map((tab, index) =>
+            generateTab(generateOnChange, tab, tabs[tab], index)
+          )}
+        </Box>
+      </Box>
       <Box
         display="flex"
         flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
+        alignItems="flex-end"
         padding="1rem"
+        paddingTop="0"
       >
-        <Heading width="100%">Emoji Poll settings</Heading>
-        {Object.keys(tabs).map((tab, index) =>
-          generateTab(generateOnChange, tab, tabs[tab], index)
-        )}
+        <Box
+          width="100%"
+          border="thick"
+          borderRadius="none"
+          borderWidth="1px"
+          marginBottom=".5rem"
+        ></Box>
+        <Button variant="primary" onClick={() => console.log("Button clicked")}>
+          Done
+        </Button>
       </Box>
     </Box>
   );
