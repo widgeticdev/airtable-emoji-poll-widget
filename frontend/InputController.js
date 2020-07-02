@@ -49,25 +49,19 @@ const InputController = (props) => {
       };
       return (
         <Box marginTop="1rem">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom=".25rem"
-          >
-            <Label style={{ marginBottom: "0px" }}>
-              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
-            </Label>
-            <Tooltip
-              content={controlOptions.help_text}
-              placementX={Tooltip.placements.LEFT}
-              placementY={Tooltip.placements.CENTER}
-            >
-              <Button icon="info" aria-label="info" />
-            </Tooltip>
-          </Box>
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+          </Label>
 
-          <ColorPicker />
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
+          >
+            <Box>
+              <ColorPicker />
+            </Box>
+          </Tooltip>
         </Box>
       );
     }
@@ -88,24 +82,18 @@ const InputController = (props) => {
       };
       return (
         <Box marginTop="1rem">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom=".25rem"
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+          </Label>
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
           >
-            <Label style={{ marginBottom: "0px" }}>
-              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
-            </Label>
-            <Tooltip
-              content={controlOptions.help_text}
-              placementX={Tooltip.placements.LEFT}
-              placementY={Tooltip.placements.CENTER}
-            >
-              <Button icon="info" aria-label="info" />
-            </Tooltip>
-            <MySelectButtons />
-          </Box>
+            <Box>
+              <MySelectButtons />
+            </Box>
+          </Tooltip>
         </Box>
       );
     }
@@ -124,6 +112,7 @@ const InputController = (props) => {
         const [value, setValue] = useState(currentValue);
         return (
           <input
+            style={{ width: "100%" }}
             value={parseInt(value)}
             type="number"
             min={0}
@@ -138,29 +127,20 @@ const InputController = (props) => {
       };
       return (
         <Box marginTop="1rem">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom=".25rem"
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+          </Label>
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
           >
-            <Label style={{ marginBottom: "0px" }}>
-              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
-            </Label>
-            <Tooltip
-              content={controlOptions.help_text}
-              placementX={Tooltip.placements.LEFT}
-              placementY={Tooltip.placements.CENTER}
-            >
-              <Button icon="info" aria-label="info" />
-            </Tooltip>
-          </Box>
-
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <NumberInput />
-            &nbsp;
-            <span>{controlOptions.unit}</span>
-          </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <NumberInput />
+              &nbsp;
+              <span>{controlOptions.unit}</span>
+            </div>
+          </Tooltip>
         </Box>
       );
     }
@@ -183,24 +163,18 @@ const InputController = (props) => {
       };
       return (
         <Box marginTop="1rem">
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom=".25rem"
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+          </Label>
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
           >
-            <Label style={{ marginBottom: "0px" }}>
-              {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
-            </Label>
-            <Tooltip
-              content={controlOptions.help_text}
-              placementX={Tooltip.placements.LEFT}
-              placementY={Tooltip.placements.CENTER}
-            >
-              <Button icon="info" aria-label="info" />
-            </Tooltip>
-          </Box>
-          <MySwitch />
+            <Box>
+              <MySwitch />
+            </Box>
+          </Tooltip>
         </Box>
       );
     }
