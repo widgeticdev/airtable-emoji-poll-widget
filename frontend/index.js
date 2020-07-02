@@ -17,6 +17,7 @@ import {
   contentMeta,
   skinMeta,
 } from "./widget.json";
+import { FieldType } from "@airtable/blocks/models";
 
 class EmojiPoll extends React.Component {
   constructor(props) {
@@ -78,6 +79,62 @@ class EmojiPoll extends React.Component {
   }
 }
 // sets up the bases if not already there
+const generateField = (attribute) => {};
+const setupTables = async () => {
+  // create the tables
+  const contentTable = base.getTableByNameIfExists("Content");
+  const detailsTable = base.getTableByNameIfExists("Details");
+  const resultsTable = base.getTableByNameIfExists("Results");
+  if (
+    !contentTable ||
+    (!detailsTable && contentMeta.bulkEditor) ||
+    !resultsTable
+  ) {
+    alert("Bad base state, please remove the block and re-install");
+    return null;
+  }
+  if (!contentTable) {
+    const fields = [generateField(contentMeta.input)];
+    if (base.unstable_hasPermissionToCreateTable("Content", fields)) {
+      await base.unstable_createTableAsync("Content", fields);
+      // and create records
+    }
+  }
+  if (!detailsTable && contentMeta.bulkEditor) {
+    const name = "Details";
+    const fields = Object.keys(contentMeta.bulkEditor).map((attribute) =>
+      generateField(attribute)
+    );
+    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
+      await base.unstable_createTableAsync(name, fields);
+    }
+  }
+  if (!resultsTable) {
+    const name = "Results";
+    const fields = [{ name: "Result", type: FieldType.BUTTON }];
+    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
+      await base.unstable_createTableAsync(name, fields);
+    }
+  }
+};
+
+// if content is available, returns it otherwise returns false
+const readContent = async () => {
+  const currentContent = {};
+  const tableNames = ["Content", "Details", "Results"];
+  // check if the block has all the tables
+  const tablesExist = tableNames.map((tableName) => {
+    return base.getTableByNameIfExists(tableName);
+  });
+  if (!(tablesExist[0] && tablesExist[1] && tablesExist[2])) {
+    await setupTables();
+  }
+  // at this point, these tables are guaranteed to exist
+  const inputTable = base.getTableByName("Content");
+  // read
+  const answers = inputTable.getFieldIfExists(contentMeta.input.options.label);
+  const detailsTable = base.getTableByName("Details");
+};
 
 function EmojiPollBlock() {
   // Block viewport
@@ -94,34 +151,16 @@ function EmojiPollBlock() {
     }
   });
 
-  const setupTables = async () => {
-    // create the tables
-    await Promise.all();
-    // and set up listeners on the fields
-  };
-  // if content is available, returns it otherwise returns false
-  const readContent = async () => {
-    const currentContent = {};
-    const tableNames = ["Content", "Details", "Results"];
-    // check if the block has all the tables
-    const tablesExist = tableNames.map((tableName) => {
-      return base.getTableByNameIfExists(tableName);
-    });
-    if (!(tablesExist[0] && tablesExist[1] && tablesExist[2])) {
-      await setupTables();
-    }
-    // at this point, these tables are guaranteed to exist
-    const inputTable = base.getTableByName("Content");
-    // read
-    const answers = inputTable.getFieldIfExists(
-      contentMeta.input.options.label
-    );
-    const detailsTable = base.getTableByName("Details");
-  };
   useEffect(() => {
-    readContent();
     return viewport.unwatch("isFullscreen");
   });
+
+  if (contentMeta.bulkEditor) {
+    const detailsTable = base.getTableByName("Details");
+    detailsTable.watch([], function (model) {});
+  }
+  const contentTable = base.getTableByName("Content");
+  contentTable.watch([{ name: "hello" }], function (data) {});
 
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {
@@ -134,15 +173,15 @@ function EmojiPollBlock() {
   return <EmojiPoll isEditorVisible={editorVisible} content={content} />;
 }
 
-loadScriptFromURLAsync(
-  "https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js"
-).then(() => {
-  window.Widgetic.init(
-    "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
-    "https://airtable.widgetic.com/callback"
-  );
-  if (!globalConfig.get("skin")) {
-    globalConfig.setAsync("skin", skins[0]);
-  }
-  initializeBlock(() => <EmojiPollBlock />);
-});
+loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
+  .then(() => setupTables())
+  .then(() => {
+    window.Widgetic.init(
+      "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
+      "https://airtable.widgetic.com/callback"
+    );
+    if (!globalConfig.get("skin")) {
+      globalConfig.setAsync("skin", skins[0]);
+    }
+    initializeBlock(() => <EmojiPollBlock />);
+  });
