@@ -39,6 +39,7 @@ const InputController = (props) => {
         return (
           <ColorPalette
             color={color}
+            squareMargin={2}
             allowedColors={Object.keys(allowedColors).map((col) => colors[col])}
             onChange={(newVal) => {
               onChangeFn(colorUtils.getHexForColor(newVal));
