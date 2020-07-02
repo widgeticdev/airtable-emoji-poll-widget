@@ -54,9 +54,8 @@ function Editor(props) {
     <Box
       width="325px"
       height="100%"
-      display={visible ? "block" : "none"}
+      display={visible ? "flex" : "none"}
       backgroundColor="rgb(250, 250, 250)"
-      display="flex"
       flexDirection="column"
       overflow="hidden"
     >
