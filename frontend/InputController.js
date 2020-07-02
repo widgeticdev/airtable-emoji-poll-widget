@@ -77,7 +77,6 @@ const InputController = (props) => {
               return setValue(newVal);
             }}
             options={controlOptions.options}
-            size="large"
           />
         );
       };
@@ -113,7 +112,7 @@ const InputController = (props) => {
         const [value, setValue] = useState(currentValue);
         return (
           <input
-            style={{ width: "100%" }}
+            style={{ width: "100%", textAlign: "right" }}
             value={parseInt(value)}
             type="number"
             min={0}
