@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Input,
   Tooltip,
   ColorPalette,
   SelectButtons,
@@ -39,6 +40,7 @@ const InputController = (props) => {
         return (
           <ColorPalette
             color={color}
+            squareMargin={2}
             allowedColors={Object.keys(allowedColors).map((col) => colors[col])}
             onChange={(newVal) => {
               onChangeFn(colorUtils.getHexForColor(newVal));
@@ -76,7 +78,6 @@ const InputController = (props) => {
               return setValue(newVal);
             }}
             options={controlOptions.options}
-            size="large"
           />
         );
       };
@@ -111,16 +112,20 @@ const InputController = (props) => {
       const NumberInput = () => {
         const [value, setValue] = useState(currentValue);
         return (
-          <input
-            style={{ width: "100%" }}
-            value={parseInt(value)}
-            type="number"
-            min={0}
-            max={100}
-            step={1}
+          <Input
+            style={{
+              width: "100%",
+              height: "32px",
+              type: "number",
+              min: "0",
+              max: "100",
+              step: "1",
+            }}
+            placeholder="0"
+            value={value}
             onChange={(e) => {
               onChangeFn(parseInt(e.target.value));
-              return setValue(parseInt(event.target.value));
+              return setValue(event.target.value);
             }}
           />
         );
@@ -138,7 +143,9 @@ const InputController = (props) => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <NumberInput />
               &nbsp;
-              <span>{controlOptions.unit}</span>
+              <span style={{ color: "rgb(51, 51, 51)" }}>
+                {controlOptions.unit}
+              </span>
             </div>
           </Tooltip>
         </Box>

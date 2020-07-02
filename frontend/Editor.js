@@ -8,7 +8,7 @@ function Editor(props) {
   const generateTab = (generateOnChange, tabName, controls, index) => {
     // tab is an object straight out of widget skinMeta
     return (
-      <Box key={parseInt(index)}>
+      <Box key={parseInt(index)} width="100%">
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
@@ -52,13 +52,17 @@ function Editor(props) {
 
   const EditorFrame = (
     <Box
-      width="325px"
+      width="324px"
       height="100%"
-      display={visible ? "block" : "none"}
+      display={visible ? "flex" : "none"}
       backgroundColor="rgb(250, 250, 250)"
-      display="flex"
       flexDirection="column"
       overflow="hidden"
+      border="default"
+      borderRadius="none"
+      borderTop="none"
+      borderBottom="none"
+      borderRight="none"
     >
       <Box overflowY="auto">
         <Box
@@ -80,6 +84,7 @@ function Editor(props) {
         alignItems="flex-end"
         padding="1rem"
         paddingTop="0"
+        paddingBottom=".5rem"
       >
         <Box
           width="100%"
