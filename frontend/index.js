@@ -59,7 +59,14 @@ class EmojiPoll extends React.Component {
         justifyContent="center"
         alignItems="flex-start"
       >
-        <div id={blockID} style={{ width: "100%", height: "100%" }}></div>
+        <div
+          id={blockID}
+          style={{
+            width:
+              "calc(100% - " + (this.props.isEditorVisible ? 324 : 0) + "px)",
+            height: "100%",
+          }}
+        ></div>
         <Editor
           visible={this.props.isEditorVisible}
           skinMeta={skinMeta}

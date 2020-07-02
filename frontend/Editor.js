@@ -8,7 +8,7 @@ function Editor(props) {
   const generateTab = (generateOnChange, tabName, controls, index) => {
     // tab is an object straight out of widget skinMeta
     return (
-      <Box key={parseInt(index)}>
+      <Box key={parseInt(index)} width="100%">
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
@@ -52,7 +52,7 @@ function Editor(props) {
 
   const EditorFrame = (
     <Box
-      width="325px"
+      width="324px"
       height="100%"
       display={visible ? "flex" : "none"}
       backgroundColor="rgb(250, 250, 250)"
