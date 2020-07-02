@@ -1,6 +1,6 @@
 import React from "react";
 import { globalConfig } from "@airtable/blocks";
-import { Box } from "@airtable/blocks/ui";
+import { Box, Heading } from "@airtable/blocks/ui";
 import InputController from "./InputController";
 
 function Editor(props) {
@@ -8,7 +8,7 @@ function Editor(props) {
   const generateTab = (generateOnChange, tabName, controls, index) => {
     // tab is an object straight out of widget skinMeta
     return (
-      <Box key={parseInt(index)} paddingLeft="1rem" paddingRight="1rem">
+      <Box key={parseInt(index)}>
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
@@ -57,14 +57,15 @@ function Editor(props) {
       display={visible ? "block" : "none"}
       backgroundColor="rgb(250, 250, 250)"
       overflowY="auto"
-      paddingBottom="1rem"
     >
       <Box
         display="flex"
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
+        padding="1rem"
       >
+        <Heading width="100%">Emoji Poll settings</Heading>
         {Object.keys(tabs).map((tab, index) =>
           generateTab(generateOnChange, tab, tabs[tab], index)
         )}
