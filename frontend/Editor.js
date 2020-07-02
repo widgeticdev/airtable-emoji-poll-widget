@@ -58,6 +58,11 @@ function Editor(props) {
       backgroundColor="rgb(250, 250, 250)"
       flexDirection="column"
       overflow="hidden"
+      border="default"
+      borderRadius="none"
+      borderTop="none"
+      borderBottom="none"
+      borderRight="none"
     >
       <Box overflowY="auto">
         <Box
@@ -79,6 +84,7 @@ function Editor(props) {
         alignItems="flex-end"
         padding="1rem"
         paddingTop="0"
+        paddingBottom=".5rem"
       >
         <Box
           width="100%"
