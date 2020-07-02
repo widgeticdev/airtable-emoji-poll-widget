@@ -34,6 +34,7 @@ class EmojiPoll extends React.Component {
       autoscale: "off",
       resize: "fill",
       skin,
+      content: this.props.content,
     });
     this.setState({ composition });
   }
@@ -69,11 +70,13 @@ class EmojiPoll extends React.Component {
     );
   }
 }
+// sets up the bases if not already there
 
 function EmojiPollBlock() {
   // Block viewport
   const viewport = useViewport();
   const [editorVisible, setEditorVisible] = useState(false);
+  const [content, setContent] = useState(content[0]);
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
@@ -84,16 +87,44 @@ function EmojiPollBlock() {
     }
   });
 
+  const setupTables = async () => {
+    // create the tables
+    await Promise.all();
+    // and set up listeners on the fields
+  };
+  // if content is available, returns it otherwise returns false
+  const readContent = async () => {
+    const currentContent = {};
+    const tableNames = ["Content", "Details", "Results"];
+    // check if the block has all the tables
+    const tablesExist = tableNames.map((tableName) => {
+      return base.getTableByNameIfExists(tableName);
+    });
+    if (!(tablesExist[0] && tablesExist[1] && tablesExist[2])) {
+      await setupTables();
+    }
+    // at this point, these tables are guaranteed to exist
+    const inputTable = base.getTableByName("Content");
+    // read
+    const answers = inputTable.getFieldIfExists(
+      contentMeta.input.options.label
+    );
+    const detailsTable = base.getTableByName("Details");
+  };
+  useEffect(() => {
+    readContent();
+    return viewport.unwatch("isFullscreen");
+  });
+
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {
     if (!viewport._isFullscreen && editorVisible) {
       setEditorVisible(false);
     }
-    // console.log("isEditorVisible after exit fullscreen:", isEditorVisible);}
   });
 
   // Block HTML template
-  return <EmojiPoll isEditorVisible={editorVisible} />;
+  return <EmojiPoll isEditorVisible={editorVisible} content={content} />;
 }
 
 loadScriptFromURLAsync(

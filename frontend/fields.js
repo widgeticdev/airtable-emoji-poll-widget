@@ -1,0 +1,22 @@
+import { FieldType } from "@airtable/blocks/models";
+export default {
+  "date-time": FieldType.DATE_TIME,
+  font: 0,
+  position: 0,
+  audio: 0,
+  browser: 0,
+  color: 0,
+  dropdown: FieldType.SINGLE_SELECT,
+  image: FieldType.MULTIPLE_ATTACHMENTS,
+  orderPicker: 0,
+  rss: FieldType.URL,
+  scale: FieldType.NUMBER,
+  range: FieldType.NUMBER,
+  slider: 0,
+  stepper: FieldType.NUMBER,
+  text: FieldType.SINGLE_LINE_TEXT,
+  textarea: FieldType.MULTILINE_TEXT,
+  toggle: 0,
+  url: FieldType.URL,
+  video: FieldType.URL,
+};
