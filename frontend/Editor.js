@@ -55,24 +55,28 @@ function Editor(props) {
       width="324px"
       height="100%"
       display={visible ? "flex" : "none"}
-      backgroundColor="rgb(250, 250, 250)"
       flexDirection="column"
+      justifyContent="space-between"
       overflow="hidden"
       border="default"
       borderRadius="none"
       borderTop="none"
       borderBottom="none"
       borderRight="none"
+      backgroundColor="rgb(250, 250, 250)"
+      padding="1rem"
+      paddingBottom="0"
     >
+      <Heading width="100%" marginBottom="1rem">
+        Emoji Poll settings
+      </Heading>
       <Box overflowY="auto">
         <Box
           display="flex"
           flexDirection="column"
           justifyContent="center"
           alignItems="center"
-          padding="1rem"
         >
-          <Heading width="100%">Emoji Poll settings</Heading>
           {Object.keys(tabs).map((tab, index) =>
             generateTab(generateOnChange, tab, tabs[tab], index)
           )}
@@ -82,9 +86,8 @@ function Editor(props) {
         display="flex"
         flexDirection="column"
         alignItems="flex-end"
-        padding="1rem"
-        paddingTop="0"
         paddingBottom=".5rem"
+        marginTop="auto"
       >
         <Box
           width="100%"

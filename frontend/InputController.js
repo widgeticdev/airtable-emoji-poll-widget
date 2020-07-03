@@ -50,7 +50,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>
@@ -82,7 +82,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>
@@ -131,7 +131,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase()) +
               " (" +
@@ -166,7 +166,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>
