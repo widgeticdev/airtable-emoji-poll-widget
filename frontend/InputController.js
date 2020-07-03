@@ -26,8 +26,45 @@ const InputController = (props) => {
   switch (control) {
     case "date-time":
       return <></>;
-    case "font":
-      return <></>;
+    case "font": {
+      // console.log("FONT", props);
+      const FontSizeInput = () => {
+        const [value, setValue] = useState(currentValue);
+        return (
+          <Input
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            placeholder="0"
+            value={value}
+            onChange={(e) => {
+              onChangeFn(parseInt(e.target.value));
+              return setValue(event.target.value);
+            }}
+          />
+        );
+      };
+      return (
+        <Box marginBottom="1rem">
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase()) +
+              " (" +
+              controlOptions.size.unit.split(" ").join("") +
+              ")"}
+          </Label>
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
+          >
+            <Box>
+              <FontSizeInput />
+            </Box>
+          </Tooltip>
+        </Box>
+      );
+    }
     case "position":
       return "";
     case "audio":
@@ -50,7 +87,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>
@@ -82,7 +119,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>
@@ -109,18 +146,15 @@ const InputController = (props) => {
     case "range":
     case "slider":
     case "stepper": {
+      // console.log("Number", props);
       const NumberInput = () => {
         const [value, setValue] = useState(currentValue);
         return (
           <Input
-            style={{
-              width: "100%",
-              height: "32px",
-              type: "number",
-              min: "0",
-              max: "100",
-              step: "1",
-            }}
+            type="number"
+            min="0"
+            max="100"
+            step="1"
             placeholder="0"
             value={value}
             onChange={(e) => {
@@ -131,22 +165,21 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
-            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase()) +
+              " (" +
+              controlOptions.unit.split(" ").join("") +
+              ")"}
           </Label>
           <Tooltip
             content={controlOptions.help_text}
             placementX={Tooltip.placements.LEFT}
             placementY={Tooltip.placements.CENTER}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <Box>
               <NumberInput />
-              &nbsp;
-              <span style={{ color: "rgb(51, 51, 51)" }}>
-                {controlOptions.unit}
-              </span>
-            </div>
+            </Box>
           </Tooltip>
         </Box>
       );
@@ -169,7 +202,7 @@ const InputController = (props) => {
         );
       };
       return (
-        <Box marginTop="1rem">
+        <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
             {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
           </Label>

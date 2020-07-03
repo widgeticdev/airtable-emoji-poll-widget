@@ -5,13 +5,28 @@ import InputController from "./InputController";
 
 function Editor(props) {
   const { setSkin } = props;
-  const generateTab = (generateOnChange, tabName, controls, index) => {
+  const generateTab = (generateOnChange, tabs, tabName, controls, index) => {
+    let noTabs = Object.keys(tabs).length;
+    const separator =
+      index < noTabs - 1 ? (
+        <Box
+          width="100%"
+          border="thick"
+          borderRadius="none"
+          borderWidth="1px"
+          marginBottom=".5rem"
+        ></Box>
+      ) : (
+        <></>
+      );
+    // console.log("generateTab:", index, noTabs, separator);
     // tab is an object straight out of widget skinMeta
     return (
       <Box key={parseInt(index)} width="100%">
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
+        {separator}
       </Box>
     );
   };
@@ -19,7 +34,15 @@ function Editor(props) {
   const generateOnChange = (property) => {
     const updateSkin = (newVal) => {
       const currentSkin = globalConfig.get("skin");
-      currentSkin[property] = newVal;
+      console.log("generateOnChange", currentSkin);
+      if (property == "textFont")
+        currentSkin[property] = {
+          size: newVal,
+          family:
+            "-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'",
+          style: "500",
+        };
+      else currentSkin[property] = newVal;
       setSkin(currentSkin);
       globalConfig.setAsync("skin", currentSkin);
     };
@@ -35,13 +58,17 @@ function Editor(props) {
     const control = controlOptions.control.split("/")[2];
     const onChange = generateOnChange(propertyName);
     const values = globalConfig.get("skin");
-    const currentValue = values[propertyName];
+    const currentValue =
+      control == "font" ? values[propertyName].size : values[propertyName];
+    // console.log("Controller:", controlOptions);
+    const options = controlOptions.options;
+    // if (control == "font") options.options = options.size;
     return (
       <InputController
         key={String(index)}
         onChangeFn={onChange}
         control={control}
-        controlOptions={controlOptions.options}
+        controlOptions={options}
         currentValue={currentValue}
       />
     );
@@ -55,26 +82,28 @@ function Editor(props) {
       width="324px"
       height="100%"
       display={visible ? "flex" : "none"}
-      backgroundColor="rgb(250, 250, 250)"
       flexDirection="column"
+      justifyContent="space-between"
       overflow="hidden"
       border="default"
       borderRadius="none"
       borderTop="none"
       borderBottom="none"
       borderRight="none"
+      backgroundColor="rgb(250, 250, 250)"
     >
-      <Box overflowY="auto">
+      <Heading width="100%" padding="1rem">
+        Emoji poll settings
+      </Heading>
+      <Box overflowY="auto" paddingLeft="1rem" paddingRight="1rem">
         <Box
           display="flex"
           flexDirection="column"
           justifyContent="center"
           alignItems="center"
-          padding="1rem"
         >
-          <Heading width="100%">Emoji Poll settings</Heading>
           {Object.keys(tabs).map((tab, index) =>
-            generateTab(generateOnChange, tab, tabs[tab], index)
+            generateTab(generateOnChange, tabs, tab, tabs[tab], index)
           )}
         </Box>
       </Box>
@@ -82,9 +111,10 @@ function Editor(props) {
         display="flex"
         flexDirection="column"
         alignItems="flex-end"
-        padding="1rem"
-        paddingTop="0"
+        paddingLeft="1rem"
+        paddingRight="1rem"
         paddingBottom=".5rem"
+        marginTop="auto"
       >
         <Box
           width="100%"
