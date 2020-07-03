@@ -79,7 +79,7 @@ class EmojiPoll extends React.Component {
   }
 }
 // sets up the bases if not already there
-const generateField = (attribute) => {};
+const generateField = (label, attributeData) => {};
 const setupTables = async () => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
@@ -94,7 +94,9 @@ const setupTables = async () => {
     return null;
   }
   if (!contentTable) {
-    const fields = [generateField(contentMeta.input)];
+    const fields = [
+      generateField(contentMeta.input.options.label, contentMeta.input),
+    ];
     if (base.unstable_hasPermissionToCreateTable("Content", fields)) {
       await base.unstable_createTableAsync("Content", fields);
       // and create records
@@ -102,8 +104,11 @@ const setupTables = async () => {
   }
   if (!detailsTable && contentMeta.bulkEditor) {
     const name = "Details";
-    const fields = Object.keys(contentMeta.bulkEditor).map((attribute) =>
-      generateField(attribute)
+    const attributes = contentMeta.attributes;
+    const fields = Object.keys(
+      contentMeta.bulkEditor.attributes
+    ).map((attribute) =>
+      generateField(attributes[attribute].label, attributes[attribute])
     );
     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
       await base.unstable_createTableAsync(name, fields);
