@@ -5,13 +5,28 @@ import InputController from "./InputController";
 
 function Editor(props) {
   const { setSkin } = props;
-  const generateTab = (generateOnChange, tabName, controls, index) => {
+  const generateTab = (generateOnChange, tabs, tabName, controls, index) => {
+    let noTabs = Object.keys(tabs).length;
+    const separator =
+      index < noTabs - 1 ? (
+        <Box
+          width="100%"
+          border="thick"
+          borderRadius="none"
+          borderWidth="1px"
+          marginBottom=".5rem"
+        ></Box>
+      ) : (
+        <></>
+      );
+    // console.log("generateTab:", index, noTabs, separator);
     // tab is an object straight out of widget skinMeta
     return (
       <Box key={parseInt(index)} width="100%">
         {Object.keys(controls).map((control, index2) =>
           generateControl(generateOnChange, control, controls[control], index2)
         )}
+        {separator}
       </Box>
     );
   };
@@ -76,7 +91,7 @@ function Editor(props) {
           alignItems="center"
         >
           {Object.keys(tabs).map((tab, index) =>
-            generateTab(generateOnChange, tab, tabs[tab], index)
+            generateTab(generateOnChange, tabs, tab, tabs[tab], index)
           )}
         </Box>
       </Box>
