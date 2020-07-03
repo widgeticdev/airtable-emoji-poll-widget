@@ -133,20 +133,17 @@ const InputController = (props) => {
       return (
         <Box marginTop="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
-            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase()) +
+              " (" +
+              controlOptions.unit.split(" ").join("") +
+              ")"}
           </Label>
           <Tooltip
             content={controlOptions.help_text}
             placementX={Tooltip.placements.LEFT}
             placementY={Tooltip.placements.CENTER}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <NumberInput />
-              &nbsp;
-              <span style={{ color: "rgb(51, 51, 51)" }}>
-                {controlOptions.unit}
-              </span>
-            </div>
+            <NumberInput />
           </Tooltip>
         </Box>
       );
