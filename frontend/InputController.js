@@ -26,8 +26,42 @@ const InputController = (props) => {
   switch (control) {
     case "date-time":
       return <></>;
-    case "font":
-      return <></>;
+    case "font": {
+      // console.log("FONT", props);
+      const FontSizeInput = () => {
+        const [value, setValue] = useState(currentValue);
+        return (
+          <Input
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            placeholder="0"
+            value={value}
+            onChange={(e) => {
+              onChangeFn(parseInt(e.target.value));
+              return setValue(event.target.value);
+            }}
+          />
+        );
+      };
+      return (
+        <Box marginBottom="1rem">
+          <Label style={{ marginBottom: ".25rem" }}>
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+          </Label>
+          <Tooltip
+            content={controlOptions.help_text}
+            placementX={Tooltip.placements.LEFT}
+            placementY={Tooltip.placements.CENTER}
+          >
+            <Box>
+              <FontSizeInput />
+            </Box>
+          </Tooltip>
+        </Box>
+      );
+    }
     case "position":
       return "";
     case "audio":
@@ -109,6 +143,7 @@ const InputController = (props) => {
     case "range":
     case "slider":
     case "stepper": {
+      // console.log("Number", props);
       const NumberInput = () => {
         const [value, setValue] = useState(currentValue);
         return (

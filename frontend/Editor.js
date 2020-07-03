@@ -34,7 +34,15 @@ function Editor(props) {
   const generateOnChange = (property) => {
     const updateSkin = (newVal) => {
       const currentSkin = globalConfig.get("skin");
-      currentSkin[property] = newVal;
+      console.log("generateOnChange", currentSkin);
+      if (property == "textFont")
+        currentSkin[property] = {
+          size: newVal,
+          family:
+            "-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol'",
+          style: "500",
+        };
+      else currentSkin[property] = newVal;
       setSkin(currentSkin);
       globalConfig.setAsync("skin", currentSkin);
     };
@@ -50,13 +58,17 @@ function Editor(props) {
     const control = controlOptions.control.split("/")[2];
     const onChange = generateOnChange(propertyName);
     const values = globalConfig.get("skin");
-    const currentValue = values[propertyName];
+    const currentValue =
+      control == "font" ? values[propertyName].size : values[propertyName];
+    // console.log("Controller:", controlOptions);
+    const options = controlOptions.options;
+    // if (control == "font") options.options = options.size;
     return (
       <InputController
         key={String(index)}
         onChangeFn={onChange}
         control={control}
-        controlOptions={controlOptions.options}
+        controlOptions={options}
         currentValue={currentValue}
       />
     );
