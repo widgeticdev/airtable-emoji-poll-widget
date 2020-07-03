@@ -64,13 +64,11 @@ function Editor(props) {
       borderBottom="none"
       borderRight="none"
       backgroundColor="rgb(250, 250, 250)"
-      padding="1rem"
-      paddingBottom="0"
     >
-      <Heading width="100%" marginBottom="1rem">
+      <Heading width="100%" padding="1rem">
         Emoji poll settings
       </Heading>
-      <Box overflowY="auto">
+      <Box overflowY="auto" paddingLeft="1rem" paddingRight="1rem">
         <Box
           display="flex"
           flexDirection="column"
@@ -86,6 +84,8 @@ function Editor(props) {
         display="flex"
         flexDirection="column"
         alignItems="flex-end"
+        paddingLeft="1rem"
+        paddingRight="1rem"
         paddingBottom=".5rem"
         marginTop="auto"
       >
