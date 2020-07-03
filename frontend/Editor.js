@@ -68,7 +68,7 @@ function Editor(props) {
       paddingBottom="0"
     >
       <Heading width="100%" marginBottom="1rem">
-        Emoji Poll settings
+        Emoji poll settings
       </Heading>
       <Box overflowY="auto">
         <Box
