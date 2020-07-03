@@ -113,14 +113,10 @@ const InputController = (props) => {
         const [value, setValue] = useState(currentValue);
         return (
           <Input
-            style={{
-              width: "100%",
-              height: "32px",
-              type: "number",
-              min: "0",
-              max: "100",
-              step: "1",
-            }}
+            type="number"
+            min="0"
+            max="100"
+            step="1"
             placeholder="0"
             value={value}
             onChange={(e) => {
@@ -143,7 +139,9 @@ const InputController = (props) => {
             placementX={Tooltip.placements.LEFT}
             placementY={Tooltip.placements.CENTER}
           >
-            <NumberInput />
+            <Box>
+              <NumberInput />
+            </Box>
           </Tooltip>
         </Box>
       );
