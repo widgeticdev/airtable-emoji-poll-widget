@@ -48,7 +48,10 @@ const InputController = (props) => {
       return (
         <Box marginBottom="1rem">
           <Label style={{ marginBottom: ".25rem" }}>
-            {capitalizeFirstLetter(controlOptions.label.toLowerCase())}
+            {capitalizeFirstLetter(controlOptions.label.toLowerCase()) +
+              " (" +
+              controlOptions.size.unit.split(" ").join("") +
+              ")"}
           </Label>
           <Tooltip
             content={controlOptions.help_text}
