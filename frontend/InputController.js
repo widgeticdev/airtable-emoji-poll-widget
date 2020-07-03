@@ -52,7 +52,6 @@ const InputController = (props) => {
               " (" +
               controlOptions.size.unit.split(" ").join("") +
               ")"}
-            }
           </Label>
           <Tooltip
             content={controlOptions.help_text}
