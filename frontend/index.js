@@ -10,6 +10,8 @@ import { globalConfig, session, base } from "@airtable/blocks";
 import React, { useEffect, useState } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
+import helper from "./fields";
+const { fields, fieldOptions } = helper;
 import {
   id as widgetId,
   skins,
@@ -79,20 +81,20 @@ class EmojiPoll extends React.Component {
   }
 }
 // sets up the bases if not already there
-const generateField = (label, attributeData) => {};
+const generateField = (label, attributeData) => {
+  const key = attributeData.control.split("/")[2];
+  const val = fields[key];
+  const options = fieldOptions[key];
+  return {
+    name: label,
+    type: FieldType[val],
+    options,
+  };
+};
 const setupTables = async () => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
   const detailsTable = base.getTableByNameIfExists("Details");
-  const resultsTable = base.getTableByNameIfExists("Results");
-  if (
-    !contentTable ||
-    (!detailsTable && contentMeta.bulkEditor) ||
-    !resultsTable
-  ) {
-    alert("Bad base state, please remove the block and re-install");
-    return null;
-  }
   if (!contentTable) {
     const fields = [
       generateField(contentMeta.input.options.label, contentMeta.input),
@@ -105,18 +107,11 @@ const setupTables = async () => {
   if (!detailsTable && contentMeta.bulkEditor) {
     const name = "Details";
     const attributes = contentMeta.attributes;
-    const fields = Object.keys(
-      contentMeta.bulkEditor.attributes
-    ).map((attribute) =>
-      generateField(attributes[attribute].label, attributes[attribute])
+    console.log("attributes");
+    const fields = contentMeta.bulkEditor.attributes.map((attribute) =>
+      generateField(attributes[attribute].options.label, attributes[attribute])
     );
-    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
-      await base.unstable_createTableAsync(name, fields);
-    }
-  }
-  if (!resultsTable) {
-    const name = "Results";
-    const fields = [{ name: "Result", type: FieldType.BUTTON }];
+    console.log("fields for details table", fields);
     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
       await base.unstable_createTableAsync(name, fields);
     }
