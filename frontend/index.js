@@ -112,26 +112,23 @@ const setupTables = async () => {
       );
       return matches.length ? false : true;
     });
-    console.log("differenceSet", differentFields);
     // for multimedia content
     differentFields.unshift({
       name: "Name",
       type: FieldType.SINGLE_LINE_TEXT,
     });
-    console.log("fields are ", differentFields);
     const fields = differentFields;
     if (base.unstable_hasPermissionToCreateTable("Content", fields)) {
       await base.unstable_createTableAsync("Content", fields);
       // and create records
       const contentTable = base.getTableByName("Content");
       const attribute = contentMeta.input.attribute;
-      console.log("data for content", content[0].content);
       const records = content[0].content.map((e) => {
         let val = {};
         val.Name = "#";
         const answer = e[attribute];
         val.Answer = answer;
-        val["Emoji Image"] = emojis[answer];
+        val["Emoji Image"] = { name: emojis[answer] };
         return val;
       });
       contentTable.createRecordsAsync(records);
@@ -140,14 +137,20 @@ const setupTables = async () => {
   if (!detailsTable && contentMeta.bulkEditor) {
     const name = "Details";
     const detailCell = content[0].content[0];
-    console.log("attributes");
     const fields = contentMeta.bulkEditor.attributes.map((attribute) =>
       generateField(attributes[attribute])
     );
     console.log("fields for details table", fields);
     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
       await base.unstable_createTableAsync(name, fields);
-      const record = [];
+      let record = {};
+      contentMeta.bulkEditor.attributes.forEach((element) => {
+        if (detailCell[element]) {
+          const key = attributes[element].options.label;
+          record[key] = detailCell[element];
+        }
+      });
+      console.log("record is ", record);
       const detailsTable = base.getTableByName("Details");
       detailsTable.createRecordAsync(record);
     }
