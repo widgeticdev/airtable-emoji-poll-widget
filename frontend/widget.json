@@ -64,7 +64,10 @@
       ]
     },
     "attributes": {
-      "buttonText": { "control": "core/controls/text", "options": [] },
+      "buttonText": {
+        "control": "core/controls/text",
+        "options": { "label": "Answer", "placeholder": "Add your answer here" }
+      },
       "emojiIcon": {
         "control": "core/controls/dropdown",
         "options": {
@@ -86,7 +89,7 @@
               "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_08_grinning_and_smile_eyes.svg"
             },
             {
-              "label": "Halo Smilling",
+              "label": "Halo Smiling",
               "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_30_halo_smile.svg"
             },
             {
@@ -106,7 +109,7 @@
               "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_26_surprised.svg"
             },
             {
-              "label": "Winkle Toungue",
+              "label": "Winkle Tongue",
               "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_01_winkle_and_tongue.svg"
             }
           ]
@@ -385,4 +388,3 @@
   "height": 300,
   "version": "364c5eb"
 }
-

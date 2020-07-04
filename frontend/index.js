@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
 import helper from "./fields";
+import emojis from "./emojis";
 const { fields, fieldOptions } = helper;
 import {
   id as widgetId,
@@ -81,10 +82,12 @@ class EmojiPoll extends React.Component {
   }
 }
 // sets up the bases if not already there
-const generateField = (label, attributeData) => {
+const generateField = (attributeData) => {
   const key = attributeData.control.split("/")[2];
   const val = fields[key];
-  const options = fieldOptions[key];
+  console.log("attributeData", attributeData);
+  const options = fieldOptions(key, attributeData.options.options);
+  const label = attributeData.options.label;
   return {
     name: label,
     type: FieldType[val],
@@ -95,45 +98,60 @@ const setupTables = async () => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
   const detailsTable = base.getTableByNameIfExists("Details");
+  const attributes = contentMeta.attributes;
   if (!contentTable) {
-    const fields = [
-      generateField(contentMeta.input.options.label, contentMeta.input),
-    ];
+    const detailFields = contentMeta.bulkEditor.attributes.map((x) =>
+      generateField(attributes[x])
+    );
+    const attributeFields = Object.keys(attributes).map((x) =>
+      generateField(attributes[x])
+    );
+    const differentFields = attributeFields.filter((field) => {
+      const matches = detailFields.filter(
+        (dField) => dField.name === field.name
+      );
+      return matches.length ? false : true;
+    });
+    console.log("differenceSet", differentFields);
+    // for multimedia content
+    differentFields.unshift({
+      name: "Name",
+      type: FieldType.SINGLE_LINE_TEXT,
+    });
+    console.log("fields are ", differentFields);
+    const fields = differentFields;
     if (base.unstable_hasPermissionToCreateTable("Content", fields)) {
       await base.unstable_createTableAsync("Content", fields);
       // and create records
+      const contentTable = base.getTableByName("Content");
+      const attribute = contentMeta.input.attribute;
+      console.log("data for content", content[0].content);
+      const records = content[0].content.map((e) => {
+        let val = {};
+        val.Name = "#";
+        const answer = e[attribute];
+        val.Answer = answer;
+        val["Emoji Image"] = emojis[answer];
+        return val;
+      });
+      contentTable.createRecordsAsync(records);
     }
   }
   if (!detailsTable && contentMeta.bulkEditor) {
     const name = "Details";
-    const attributes = contentMeta.attributes;
+    const detailCell = content[0].content[0];
     console.log("attributes");
     const fields = contentMeta.bulkEditor.attributes.map((attribute) =>
-      generateField(attributes[attribute].options.label, attributes[attribute])
+      generateField(attributes[attribute])
     );
     console.log("fields for details table", fields);
     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
       await base.unstable_createTableAsync(name, fields);
+      const record = [];
+      const detailsTable = base.getTableByName("Details");
+      detailsTable.createRecordAsync(record);
     }
   }
-};
-
-// if content is available, returns it otherwise returns false
-const readContent = async () => {
-  const currentContent = {};
-  const tableNames = ["Content", "Details", "Results"];
-  // check if the block has all the tables
-  const tablesExist = tableNames.map((tableName) => {
-    return base.getTableByNameIfExists(tableName);
-  });
-  if (!(tablesExist[0] && tablesExist[1] && tablesExist[2])) {
-    await setupTables();
-  }
-  // at this point, these tables are guaranteed to exist
-  const inputTable = base.getTableByName("Content");
-  // read
-  const answers = inputTable.getFieldIfExists(contentMeta.input.options.label);
-  const detailsTable = base.getTableByName("Details");
 };
 
 function EmojiPollBlock() {
