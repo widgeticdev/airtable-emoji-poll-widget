@@ -16,7 +16,7 @@ const { fields, fieldOptions } = helper;
 import {
   id as widgetId,
   skins,
-  content,
+  content as demoContent,
   contentMeta,
   skinMeta,
 } from "./widget.json";
@@ -123,7 +123,7 @@ const setupTables = async () => {
       // and create records
       const contentTable = base.getTableByName("Content");
       const attribute = contentMeta.input.attribute;
-      const records = content[0].content.map((e) => {
+      const records = demoContent[0].content.map((e) => {
         let val = {};
         val.Name = "#";
         const answer = e[attribute];
@@ -136,7 +136,7 @@ const setupTables = async () => {
   }
   if (!detailsTable && contentMeta.bulkEditor) {
     const name = "Details";
-    const detailCell = content[0].content[0];
+    const detailCell = demoContent[0].content[0];
     const fields = contentMeta.bulkEditor.attributes.map((attribute) =>
       generateField(attributes[attribute])
     );
@@ -161,7 +161,7 @@ function EmojiPollBlock() {
   // Block viewport
   const viewport = useViewport();
   const [editorVisible, setEditorVisible] = useState(false);
-  const [content, setContent] = useState(content[0]);
+  const [content, setContent] = useState(demoContent[0].content);
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
