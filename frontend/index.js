@@ -178,10 +178,22 @@ function EmojiPollBlock() {
 
   if (contentMeta.bulkEditor) {
     const detailsTable = base.getTableByName("Details");
-    detailsTable.watch([], function (model) {});
+    const watchableFields = contentMeta.bulkEditor.attributes.map(
+      (attr) => contentMeta.attributes[attr].options.label
+    );
+    console.log("watchableFields", watchableFields);
+    detailsTable.watch(watchableFields, function (data) {
+      console.log("data in detailsTable", data);
+      const records = detailsTable.selectRecords();
+      // delineate
+    });
   }
   const contentTable = base.getTableByName("Content");
-  contentTable.watch([{ name: "hello" }], function (data) {});
+  contentTable.watch(["Name", "Answer", "Emoji Icon"], function (data) {
+    console.log("data", data);
+    const records = contentTable.selectRecords();
+    console.log("read these records", records);
+  });
 
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {
