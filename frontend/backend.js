@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios from "axios";
 
+// interface with Widgetic's api that provides composition IDs
 const backend = axios.create({
-  // baseURL: 'http://localhost:9801'
-  baseURL: 'https://airtable.widgetic.com'
-})
-export default backend
+  baseURL: "https://airtable.widgetic.com",
+});
+export default backend;

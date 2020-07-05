@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Input,
   Tooltip,
   ColorPalette,
@@ -31,7 +30,7 @@ const InputController = (props) => {
       const FontSizeInput = () => {
         const [value, setValue] = useState(currentValue);
         return (
-          <Input
+          <input
             type="number"
             min="0"
             max="100"
