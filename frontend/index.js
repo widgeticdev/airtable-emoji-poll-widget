@@ -10,9 +10,10 @@ import { globalConfig, session, base } from "@airtable/blocks";
 import React, { useEffect, useState } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
-import helper from "./fields";
+import helper from "./helper";
 import emojis from "./emojis";
-const { fields, fieldOptions } = helper;
+import { FieldType } from "@airtable/blocks/models";
+const { generateField } = helper;
 import {
   id as widgetId,
   skins,
@@ -20,7 +21,6 @@ import {
   contentMeta,
   skinMeta,
 } from "./widget.json";
-import { FieldType } from "@airtable/blocks/models";
 
 class EmojiPoll extends React.Component {
   constructor(props) {
@@ -81,19 +81,6 @@ class EmojiPoll extends React.Component {
     );
   }
 }
-// sets up the bases if not already there
-const generateField = (attributeData) => {
-  const key = attributeData.control.split("/")[2];
-  const val = fields[key];
-  console.log("attributeData", attributeData);
-  const options = fieldOptions(key, attributeData.options.options);
-  const label = attributeData.options.label;
-  return {
-    name: label,
-    type: FieldType[val],
-    options,
-  };
-};
 const setupTables = async () => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
@@ -157,11 +144,20 @@ const setupTables = async () => {
   }
 };
 
-function EmojiPollBlock() {
+const readTables = async () => {
+  const contentTable = base.getTableByName("Content");
+  const detailsTable = base.getTableByName("Details");
+  const contentTableData = contentTable.selectRecords();
+  console.log(
+    "contentTableData",
+    contentTableData.getCellValueAsString("Answer")
+  );
+};
+function EmojiPollBlock(props) {
   // Block viewport
   const viewport = useViewport();
   const [editorVisible, setEditorVisible] = useState(false);
-  const [content, setContent] = useState(demoContent[0].content);
+  const [content, setContent] = useState(props.content);
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
@@ -182,11 +178,16 @@ function EmojiPollBlock() {
       (attr) => contentMeta.attributes[attr].options.label
     );
     console.log("watchableFields", watchableFields);
-    detailsTable.watch(watchableFields, function (data) {
-      console.log("data in detailsTable", data);
-      const records = detailsTable.selectRecords();
-      // delineate
-    });
+    detailsTable.watch(
+      watchableFields.map((x) => {
+        return { field: x };
+      }),
+      function (data) {
+        console.log("data in detailsTable", data);
+        const records = detailsTable.selectRecords();
+        // delineate
+      }
+    );
   }
   const contentTable = base.getTableByName("Content");
   contentTable.watch(["Name", "Answer", "Emoji Icon"], function (data) {
@@ -208,7 +209,9 @@ function EmojiPollBlock() {
 
 loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
   .then(() => setupTables())
-  .then(() => {
+  .then(() => readTables())
+  .then((data) => {
+    // data is data read by readTables, convert it to content
     window.Widgetic.init(
       "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
       "https://airtable.widgetic.com/callback"
@@ -216,5 +219,13 @@ loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
     if (!globalConfig.get("skin")) {
       globalConfig.setAsync("skin", skins[0]);
     }
-    initializeBlock(() => <EmojiPollBlock />);
+    // from label to tarnslator attribute
+    let translator = {};
+    Object.keys(contentMeta.attributes).forEach((attribute) => {
+      translator[contentMeta.attributes[attribute].options.label] = attribute;
+    });
+    const content = {};
+    initializeBlock(() => (
+      <EmojiPollBlock content={content} translator={translator} />
+    ));
   });

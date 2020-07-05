@@ -1,3 +1,4 @@
+import { FieldType } from "@airtable/blocks/models";
 import emojis from "./emojis";
 const fields = {
   "date-time": "DATE_TIME",
@@ -53,7 +54,7 @@ const fieldOptions = (input, options) => {
     }
     case "dropdown": {
       console.log("passed options", options);
-      const choices = options.map((x, index) => {
+      const choices = options.map((x) => {
         let result = {};
         console.log("x is ", x);
         result.name = emojis[x.label];
@@ -105,10 +106,22 @@ const fieldOptions = (input, options) => {
     }
   }
 };
+// sets up the bases if not already there
+const generateField = (attributeData) => {
+  const key = attributeData.control.split("/")[2];
+  const val = fields[key];
+  console.log("attributeData", attributeData);
+  const options = fieldOptions(key, attributeData.options.options);
+  const label = attributeData.options.label;
+  return {
+    name: label,
+    type: FieldType[val],
+    options,
+  };
+};
 
 const helper = {
-  fields,
-  fieldOptions,
+  generateField,
 };
 
 export default helper;
