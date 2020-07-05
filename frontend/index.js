@@ -5,6 +5,7 @@ import {
   Box,
   useViewport,
 } from "@airtable/blocks/ui";
+//TODO hook up the backend
 import backend from "./backend";
 import { globalConfig, session, base } from "@airtable/blocks";
 import React, { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import Editor from "./Editor";
 import helper from "./helper";
 import emojis from "./emojis";
 import { FieldType } from "@airtable/blocks/models";
+
 const { generateField } = helper;
 import {
   id as widgetId,
@@ -144,20 +146,11 @@ const setupTables = async () => {
   }
 };
 
-const readTables = async () => {
-  const contentTable = base.getTableByName("Content");
-  const detailsTable = base.getTableByName("Details");
-  const contentTableData = contentTable.selectRecords();
-  console.log(
-    "contentTableData",
-    contentTableData.getCellValueAsString("Answer")
-  );
-};
-function EmojiPollBlock(props) {
+function EmojiPollBlock() {
   // Block viewport
   const viewport = useViewport();
   const [editorVisible, setEditorVisible] = useState(false);
-  const [content, setContent] = useState(props.content);
+  const [content, setContent] = useState({});
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
@@ -168,32 +161,9 @@ function EmojiPollBlock(props) {
     }
   });
 
+  // mandatory call to unwatch
   useEffect(() => {
-    return viewport.unwatch("isFullscreen");
-  });
-
-  if (contentMeta.bulkEditor) {
-    const detailsTable = base.getTableByName("Details");
-    const watchableFields = contentMeta.bulkEditor.attributes.map(
-      (attr) => contentMeta.attributes[attr].options.label
-    );
-    console.log("watchableFields", watchableFields);
-    detailsTable.watch(
-      watchableFields.map((x) => {
-        return { field: x };
-      }),
-      function (data) {
-        console.log("data in detailsTable", data);
-        const records = detailsTable.selectRecords();
-        // delineate
-      }
-    );
-  }
-  const contentTable = base.getTableByName("Content");
-  contentTable.watch(["Name", "Answer", "Emoji Icon"], function (data) {
-    console.log("data", data);
-    const records = contentTable.selectRecords();
-    console.log("read these records", records);
+    return () => viewport.unwatch("isFullscreen");
   });
 
   // Block fulscreen button
@@ -207,10 +177,22 @@ function EmojiPollBlock(props) {
   return <EmojiPoll isEditorVisible={editorVisible} content={content} />;
 }
 
+const retrieveCompositionId = async () => {
+  let compId = globalConfig.get("compId");
+  if (!compId) {
+    const result = await backend.post("/block/init", {
+      userId: session.currentUser.id,
+      widgetId,
+    });
+    globalConfig.setAsync("compId", result.data.compositionId);
+    compId = result.data.compositionId;
+  }
+  return compId;
+};
 loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
   .then(() => setupTables())
-  .then(() => readTables())
-  .then((data) => {
+  .then(() => retrieveCompositionId())
+  .then((compositionId) => {
     // data is data read by readTables, convert it to content
     window.Widgetic.init(
       "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
@@ -219,13 +201,12 @@ loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
     if (!globalConfig.get("skin")) {
       globalConfig.setAsync("skin", skins[0]);
     }
-    // from label to tarnslator attribute
+    // from label to translator attribute
     let translator = {};
     Object.keys(contentMeta.attributes).forEach((attribute) => {
       translator[contentMeta.attributes[attribute].options.label] = attribute;
     });
-    const content = {};
     initializeBlock(() => (
-      <EmojiPollBlock content={content} translator={translator} />
+      <EmojiPollBlock compId={compositionId} translator={translator} />
     ));
   });

@@ -31,6 +31,7 @@ function Editor(props) {
     );
   };
 
+  // generates the onChange method for the passed input controller
   const generateOnChange = (property) => {
     const updateSkin = (newVal) => {
       const currentSkin = globalConfig.get("skin");

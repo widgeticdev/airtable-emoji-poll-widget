@@ -1,5 +1,8 @@
 import { FieldType } from "@airtable/blocks/models";
 import emojis from "./emojis";
+// helper functions for interfacing between Airtable & Widgetic
+
+// fields match Widgetic's input controllers to Airtable's field types
 const fields = {
   "date-time": "DATE_TIME",
   font: null,
@@ -22,6 +25,7 @@ const fields = {
   video: "URL",
 };
 
+// generate field options for each input controller
 const fieldOptions = (input, options) => {
   switch (input) {
     case "date-time": {
@@ -106,11 +110,11 @@ const fieldOptions = (input, options) => {
     }
   }
 };
-// sets up the bases if not already there
+
+// final generateField function
 const generateField = (attributeData) => {
   const key = attributeData.control.split("/")[2];
   const val = fields[key];
-  console.log("attributeData", attributeData);
   const options = fieldOptions(key, attributeData.options.options);
   const label = attributeData.options.label;
   return {
