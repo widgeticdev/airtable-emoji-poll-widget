@@ -6,8 +6,8 @@ import {
   useViewport,
 } from "@airtable/blocks/ui";
 
-import { globalConfig, session, base } from "@airtable/blocks";
-import { useRecords } from "@airtable/blocks/ui";
+import { globalConfig, session } from "@airtable/blocks";
+import { useRecords, useBase } from "@airtable/blocks/ui";
 import React, { useState } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
@@ -41,6 +41,32 @@ class EmojiPoll extends React.Component {
     );
     composition.setContent(content);
     this.setState({ composition });
+  }
+  componentDidUpdate() {
+    console.log("reached here");
+    const { contents, details, translator } = this.props;
+    const relevantDetail = details[0];
+    let content = contents.map((content, index) => {
+      const contentItem = {};
+      if (index === 0) {
+        const fields = Object.keys(translator);
+        fields.forEach((field) => {
+          if (field != "Answer" && field != "Emoji Icon") {
+            const key = translator[field];
+            contentItem[key] = relevantDetail.getCellValueAsString(field);
+          }
+        });
+      }
+      contentItem[translator["Answer"]] = content.getCellValueAsString(
+        "Answer"
+      );
+      contentItem[translator["Emoji Icon"]] =
+        urls[content.getCellValueAsString("Emoji Icon")];
+      contentItem.id = "c" + index;
+      contentItem.order = index + 1;
+      return contentItem;
+    });
+    this.state.composition.setContent(content);
   }
 
   setSkin(skin) {
@@ -83,9 +109,15 @@ class EmojiPoll extends React.Component {
 }
 
 function EmojiPollBlock(props) {
-  const { translator, compId } = props;
+  const { compId } = props;
   // Block viewport
   const viewport = useViewport();
+
+  // from label to translator attribute
+  let translator = {};
+  Object.keys(contentMeta.attributes).forEach((attribute) => {
+    translator[contentMeta.attributes[attribute].options.label] = attribute;
+  });
   const [editorVisible, setEditorVisible] = useState(false);
   // Block settings button
   useSettingsButton(function () {
@@ -98,13 +130,13 @@ function EmojiPollBlock(props) {
   });
   // read the current tables and translate the content to
   // 'content' object
+  const base = useBase();
   const contentTable = base.getTableByName("Content");
   const detailsTable = base.getTableByName("Details");
   const contents = useRecords(contentTable);
   const details = useRecords(detailsTable);
   const relevantDetail = details[0];
   let content = contents.map((content, index) => {
-    console.log(index);
     const contentItem = {};
     if (index === 0) {
       const fields = Object.keys(translator);
@@ -134,6 +166,9 @@ function EmojiPollBlock(props) {
   // Block HTML template
   return (
     <EmojiPoll
+      translator={translator}
+      contents={contents}
+      details={details}
       compId={compId}
       isEditorVisible={editorVisible}
       content={content}
@@ -157,20 +192,8 @@ loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
   .then(() => setupTables())
   .then(() => retrieveCompositionId())
   .then((compositionId) => {
-    // data is data read by readTables, convert it to content
-    window.Widgetic.init(
-      "5525287d09c7e201498b4567_5ep4alabc9wk00kc08c8o4kw008ksowogsg4w0wwkog8ww80o0",
-      "https://airtable.widgetic.com/callback"
-    );
     if (!globalConfig.get("skin")) {
       globalConfig.setAsync("skin", skins[0]);
     }
-    // from label to translator attribute
-    let translator = {};
-    Object.keys(contentMeta.attributes).forEach((attribute) => {
-      translator[contentMeta.attributes[attribute].options.label] = attribute;
-    });
-    initializeBlock(() => (
-      <EmojiPollBlock compId={compositionId} translator={translator} />
-    ));
+    initializeBlock(() => <EmojiPollBlock compId={compositionId} />);
   });
