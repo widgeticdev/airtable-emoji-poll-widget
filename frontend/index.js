@@ -35,7 +35,7 @@ class EmojiPoll extends React.Component {
       target,
       this.props.compId,
       {
-        autoscale: "on",
+        autoscale: "off",
         resize: "fill",
         skin,
       }
@@ -51,7 +51,7 @@ class EmojiPoll extends React.Component {
       console.log("update props called");
       this.state.composition.setContent(this.props.content);
     }
-    console.log("the composition is ", this.state.composition.api.content);
+    // console.log("the composition is ", this.state.composition.api.content);
   }
 
   setSkin(skin) {
