@@ -43,30 +43,7 @@ class EmojiPoll extends React.Component {
     this.setState({ composition });
   }
   componentDidUpdate() {
-    console.log("reached here");
-    const { contents, details, translator } = this.props;
-    const relevantDetail = details[0];
-    let content = contents.map((content, index) => {
-      const contentItem = {};
-      if (index === 0) {
-        const fields = Object.keys(translator);
-        fields.forEach((field) => {
-          if (field != "Answer" && field != "Emoji Icon") {
-            const key = translator[field];
-            contentItem[key] = relevantDetail.getCellValueAsString(field);
-          }
-        });
-      }
-      contentItem[translator["Answer"]] = content.getCellValueAsString(
-        "Answer"
-      );
-      contentItem[translator["Emoji Icon"]] =
-        urls[content.getCellValueAsString("Emoji Icon")];
-      contentItem.id = "c" + index;
-      contentItem.order = index + 1;
-      return contentItem;
-    });
-    this.state.composition.setContent(content);
+    this.state.composition.setContent(this.props.content);
   }
 
   setSkin(skin) {
@@ -166,9 +143,6 @@ function EmojiPollBlock(props) {
   // Block HTML template
   return (
     <EmojiPoll
-      translator={translator}
-      contents={contents}
-      details={details}
       compId={compId}
       isEditorVisible={editorVisible}
       content={content}
