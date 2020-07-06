@@ -187,18 +187,6 @@
     "colorAttributes": ["backgroundColor", "textFillColor, linkFillColor"],
     "tabs": {
       "Interface": {
-        "layout": {
-          "control": "core/controls/dropdown",
-          "options": {
-            "label": "Layout",
-            "help_text": "Select the desired layout for your poll.",
-            "default": "cards",
-            "options": [
-              { "label": "Cards", "value": "cards" },
-              { "label": "Slider", "value": "slider" }
-            ]
-          }
-        },
         "backgroundColor": {
           "control": "core/controls/color",
           "options": {
