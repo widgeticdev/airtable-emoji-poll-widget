@@ -1,5 +1,5 @@
-# airtable-emoji-poll-widget
-Emoji Poll Block
+### Emoji Poll
+
 
 Ask questions and gather anonymous feedback from your audience to get alignment with your customers, colleagues, and stakeholders. This is a great way to be transparent about the decision making process, using the public data available to everyone in the results table.
 
