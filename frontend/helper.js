@@ -57,17 +57,13 @@ const fieldOptions = (input, options) => {
       return null;
     }
     case "dropdown": {
-      console.log("passed options", options);
       const choices = options.map((x) => {
         let result = {};
-        console.log("x is ", x);
-        result.name = emojis[x.label];
+        result.name = emojis[x.value];
         result.color = "blueLight2";
         return result;
       });
-      return {
-        choices,
-      };
+      return { choices };
     }
     case "image": {
       return null;
@@ -117,11 +113,12 @@ const generateField = (attributeData) => {
   const val = fields[key];
   const options = fieldOptions(key, attributeData.options.options);
   const label = attributeData.options.label;
-  return {
+  const field = {
     name: label,
     type: FieldType[val],
     options,
   };
+  return field;
 };
 
 const helper = {

@@ -5,24 +5,17 @@ import {
   Box,
   useViewport,
 } from "@airtable/blocks/ui";
-//TODO hook up the backend
-import backend from "./backend";
+
 import { globalConfig, session, base } from "@airtable/blocks";
-import React, { useEffect, useState } from "react";
+import { useRecords } from "@airtable/blocks/ui";
+import React, { useState } from "react";
 import shortid from "shortid";
 import Editor from "./Editor";
-import helper from "./helper";
-import emojis from "./emojis";
-import { FieldType } from "@airtable/blocks/models";
+import backend from "./backend";
+import urls from "./urls";
+import setupTables from "./setupTables";
 
-const { generateField } = helper;
-import {
-  id as widgetId,
-  skins,
-  content as demoContent,
-  contentMeta,
-  skinMeta,
-} from "./widget.json";
+import { id as widgetId, skins, contentMeta, skinMeta } from "./widget.json";
 
 class EmojiPoll extends React.Component {
   constructor(props) {
@@ -33,15 +26,20 @@ class EmojiPoll extends React.Component {
     this.setSkin = this.setSkin.bind(this);
   }
   componentDidMount() {
-    const compositionId = "5efba5c5ecb2a19c168b4567";
     const skin = globalConfig.get("skin");
     const target = document.getElementById(globalConfig.get("id"));
-    const composition = window.Widgetic.UI.composition(target, compositionId, {
-      autoscale: "off",
-      resize: "fill",
-      skin,
-      content: this.props.content,
-    });
+    console.log("the passed props", this.props.content);
+    const { content } = this.props;
+    const composition = window.Widgetic.UI.composition(
+      target,
+      this.props.compId,
+      {
+        autoscale: "off",
+        resize: "fill",
+        skin,
+      }
+    );
+    composition.setContent(content);
     this.setState({ composition });
   }
 
@@ -83,74 +81,12 @@ class EmojiPoll extends React.Component {
     );
   }
 }
-const setupTables = async () => {
-  // create the tables
-  const contentTable = base.getTableByNameIfExists("Content");
-  const detailsTable = base.getTableByNameIfExists("Details");
-  const attributes = contentMeta.attributes;
-  if (!contentTable) {
-    const detailFields = contentMeta.bulkEditor.attributes.map((x) =>
-      generateField(attributes[x])
-    );
-    const attributeFields = Object.keys(attributes).map((x) =>
-      generateField(attributes[x])
-    );
-    const differentFields = attributeFields.filter((field) => {
-      const matches = detailFields.filter(
-        (dField) => dField.name === field.name
-      );
-      return matches.length ? false : true;
-    });
-    // for multimedia content
-    differentFields.unshift({
-      name: "Name",
-      type: FieldType.SINGLE_LINE_TEXT,
-    });
-    const fields = differentFields;
-    if (base.unstable_hasPermissionToCreateTable("Content", fields)) {
-      await base.unstable_createTableAsync("Content", fields);
-      // and create records
-      const contentTable = base.getTableByName("Content");
-      const attribute = contentMeta.input.attribute;
-      const records = demoContent[0].content.map((e) => {
-        let val = {};
-        val.Name = "#";
-        const answer = e[attribute];
-        val.Answer = answer;
-        val["Emoji Image"] = { name: emojis[answer] };
-        return val;
-      });
-      contentTable.createRecordsAsync(records);
-    }
-  }
-  if (!detailsTable && contentMeta.bulkEditor) {
-    const name = "Details";
-    const detailCell = demoContent[0].content[0];
-    const fields = contentMeta.bulkEditor.attributes.map((attribute) =>
-      generateField(attributes[attribute])
-    );
-    console.log("fields for details table", fields);
-    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
-      await base.unstable_createTableAsync(name, fields);
-      let record = {};
-      contentMeta.bulkEditor.attributes.forEach((element) => {
-        if (detailCell[element]) {
-          const key = attributes[element].options.label;
-          record[key] = detailCell[element];
-        }
-      });
-      console.log("record is ", record);
-      const detailsTable = base.getTableByName("Details");
-      detailsTable.createRecordAsync(record);
-    }
-  }
-};
 
-function EmojiPollBlock() {
+function EmojiPollBlock(props) {
+  const { translator, compId } = props;
   // Block viewport
   const viewport = useViewport();
   const [editorVisible, setEditorVisible] = useState(false);
-  const [content, setContent] = useState({});
   // Block settings button
   useSettingsButton(function () {
     if (viewport.isFullscreen) {
@@ -160,11 +96,33 @@ function EmojiPollBlock() {
       setEditorVisible(true);
     }
   });
-
-  // mandatory call to unwatch
-  useEffect(() => {
-    return () => viewport.unwatch("isFullscreen");
+  // read the current tables and translate the content to
+  // 'content' object
+  const contentTable = base.getTableByName("Content");
+  const detailsTable = base.getTableByName("Details");
+  const contents = useRecords(contentTable);
+  const details = useRecords(detailsTable);
+  const relevantDetail = details[0];
+  let content = contents.map((content, index) => {
+    console.log(index);
+    const contentItem = {};
+    if (index === 0) {
+      const fields = Object.keys(translator);
+      fields.forEach((field) => {
+        if (field != "Answer" && field != "Emoji Icon") {
+          const key = translator[field];
+          contentItem[key] = relevantDetail.getCellValueAsString(field);
+        }
+      });
+    }
+    contentItem[translator["Answer"]] = content.getCellValueAsString("Answer");
+    contentItem[translator["Emoji Icon"]] =
+      urls[content.getCellValueAsString("Emoji Icon")];
+    contentItem.id = "c" + index;
+    contentItem.order = index + 1;
+    return contentItem;
   });
+  console.log(content);
 
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {
@@ -174,7 +132,13 @@ function EmojiPollBlock() {
   });
 
   // Block HTML template
-  return <EmojiPoll isEditorVisible={editorVisible} content={content} />;
+  return (
+    <EmojiPoll
+      compId={compId}
+      isEditorVisible={editorVisible}
+      content={content}
+    />
+  );
 }
 
 const retrieveCompositionId = async () => {

@@ -5,9 +5,13 @@
     {
       "content": [
         {
-          "titleText": "How do you feel about Martin Viscarra's retirement?",
+          "titleText": "How do you feel about the level of social distancing in your physical workplace?",
           "voteMajorityStatusText": "Great, you are with the majority!",
           "voteMinorityStatusText": "Great, here\u2019s what others think.",
+          "noVotersSingular": "vote",
+          "noVotersPlural": "votes",
+          "voteDeadlineTime": "2020-9-30 1:30",
+          "voteClosedStatusText": "Voting is closed.",
           "id": "c-1",
           "order": 1,
           "buttonText": "Happy",
@@ -16,13 +20,13 @@
         {
           "id": "c-2",
           "order": 2,
-          "buttonText": "Surprised",
-          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_26_surprised.svg"
+          "buttonText": "It's fine",
+          "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_08_grinning_and_smile_eyes.svg"
         },
         {
           "id": "c-3",
           "order": 3,
-          "buttonText": "Broken",
+          "buttonText": "Upset",
           "emojiIcon": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_16_broken.svg"
         },
         {
@@ -38,7 +42,6 @@
     "options": {
       "max": 1000,
       "min": 1,
-      "free_user_limit": 3,
       "notification": {
         "min": "Please add at least one item!",
         "max": "You reached the maximum number of items."
@@ -49,30 +52,31 @@
     "input": {
       "attribute": "buttonText",
       "control": "core/controls/text",
-      "options": { "label": "Answer", "placeholder": "Add your answer here" }
+      "options": { "label": "Answer", "placeholder": "Add vote option here" }
     },
     "bulkEditor": {
-      "title": "Title Text",
+      "title": "Poll Details",
       "help_text": "Enter your question here.",
       "attributes": [
         "titleText",
         "voteMajorityStatusText",
         "voteMinorityStatusText",
-        "voteDeadlineOn",
         "voteDeadlineTime",
-        "voteClosedStatusText"
+        "voteClosedStatusText",
+        "noVotersSingular",
+        "noVotersPlural"
       ]
     },
     "attributes": {
       "buttonText": {
         "control": "core/controls/text",
-        "options": { "label": "Answer", "placeholder": "Add your answer here" }
+        "options": { "label": "Answer", "placeholder": "Add vote option here" }
       },
       "emojiIcon": {
         "control": "core/controls/dropdown",
         "options": {
-          "label": "Emoji Image",
-          "help_text": "Select the desired answer.",
+          "label": "Emoji Icon",
+          "help_text": "Add an emoji to the vote option.",
           "default": "",
           "options": [
             { "label": "Empty", "value": "" },
@@ -118,7 +122,7 @@
       "titleText": {
         "control": "core/controls/text",
         "options": {
-          "label": "Title",
+          "label": "Question",
           "placeholder": "Add your question here",
           "editable": false
         }
@@ -126,45 +130,50 @@
       "voteMajorityStatusText": {
         "control": "core/controls/text",
         "options": {
-          "label": "Majority Status",
-          "placeholder": "Add majority status text here",
+          "label": "Voted Majority",
+          "placeholder": "Add a summary to display when voting the same as the majority.",
           "editable": false
         }
       },
       "voteMinorityStatusText": {
         "control": "core/controls/text",
         "options": {
-          "label": "Minority Status",
-          "placeholder": "Add minority status text here",
+          "label": "Voted Minority",
+          "placeholder": "Add a summary to display when not voting the same as the majority.",
           "editable": false
         }
       },
-      "voteDeadlineOn": {
-        "control": "core/controls/toggle",
-        "access": 1,
+      "noVotersSingular": {
+        "control": "core/controls/text",
         "options": {
-          "label": "Closed Vote Timeframe",
-          "default": false,
+          "label": "i18n Singular",
+          "placeholder": "Add word for vote singular",
+          "editable": false
+        }
+      },
+      "noVotersPlural": {
+        "control": "core/controls/text",
+        "options": {
+          "label": "i18n Plural",
+          "placeholder": "Add word for vote plural",
           "editable": false
         }
       },
       "voteDeadlineTime": {
-        "if": { "voteDeadlineOn": true },
         "control": "core/controls/date-time",
         "options": {
           "placeholder": "Add a date",
-          "help_text": "Select the time and date when the voting expires.",
+          "help_text": "Select the date and time when voting is closed.",
           "format": "Y/m/d H:i",
-          "label": "Closed Vote Deadline",
+          "label": "Vote Deadline",
           "editable": false
         }
       },
       "voteClosedStatusText": {
-        "if": { "voteDeadlineOn": true },
         "control": "core/controls/text",
         "options": {
-          "label": "Closed Vote Status",
-          "placeholder": "Add your closed vote status text here",
+          "label": "Vote Closed",
+          "placeholder": "Add a summary to display when voting is closed.",
           "editable": false
         }
       }
@@ -182,10 +191,10 @@
           "control": "core/controls/dropdown",
           "options": {
             "label": "Layout",
-            "help_text": "Select the desired layout for your gallery.",
-            "default": "grid",
+            "help_text": "Select the desired layout for your poll.",
+            "default": "cards",
             "options": [
-              { "label": "Grid", "value": "grid" },
+              { "label": "Cards", "value": "cards" },
               { "label": "Slider", "value": "slider" }
             ]
           }
@@ -222,10 +231,9 @@
         },
         "widgetPadding": {
           "control": "core/controls/stepper",
-          "access": 1,
           "options": {
             "help_text": "Set the padding of the widget.",
-            "label": "Arround Padding",
+            "label": "Padding",
             "default": 3,
             "unit": " px",
             "min": 0,
@@ -234,50 +242,13 @@
         },
         "elementsPadding": {
           "control": "core/controls/stepper",
-          "access": 1,
           "options": {
-            "help_text": "Set the distance between the of the widget.",
+            "help_text": "Set the distance between the text and the cards.",
             "label": "Elements Padding",
             "default": 3,
             "unit": " px",
             "min": 0,
             "max": 300
-          }
-        },
-        "displayVotesNumber": {
-          "control": "core/controls/toggle",
-          "access": 1,
-          "options": {
-            "help_text": "If true, the votes number is displayed.",
-            "label": "Display Votes Number",
-            "default": false
-          }
-        }
-      },
-      "List": {
-        "displayPercentage": {
-          "control": "core/controls/toggle",
-          "access": 1,
-          "options": {
-            "help_text": "If true, the percentage is displayed on each answer.",
-            "label": "Display Percentage",
-            "default": false
-          }
-        },
-        "votesPrimaryColor": {
-          "control": "core/controls/color",
-          "options": {
-            "help_text": "Select the color of votes level.",
-            "label": "Votes Primary Color",
-            "default": "#c9cdcf"
-          }
-        },
-        "votesSecondaryColor": {
-          "control": "core/controls/color",
-          "options": {
-            "help_text": "Select the color of your vote.",
-            "label": "Your Vote Color",
-            "default": "#c9cdcf"
           }
         },
         "textFont": {
@@ -305,26 +276,108 @@
             "default": "#FFFFFF"
           }
         },
+        "displayVotesNumber": {
+          "control": "core/controls/toggle",
+          "options": {
+            "help_text": "If true, the votes number is displayed.",
+            "label": "Display Votes",
+            "default": false
+          }
+        }
+      },
+      "Card": {
         "itemsPadding": {
           "control": "core/controls/stepper",
           "options": {
-            "help_text": "Set the distance between any two emoji items.",
-            "label": "Items Padding",
+            "help_text": "Set the distance between any two cards.",
+            "label": "Cards Padding",
             "default": 3,
             "unit": " px",
             "min": 0,
-            "max": 300
+            "max": 25
           }
         },
-        "itemRadius": {
+        "displayLabel": {
+          "control": "core/controls/toggle",
+          "options": {
+            "help_text": "If on, the emoji labels are displayed.",
+            "label": "Display Label",
+            "default": true
+          }
+        },
+        "displayPercentage": {
+          "control": "core/controls/toggle",
+          "options": {
+            "help_text": "If true, the votes are displayed as percentage.",
+            "label": "Display Percentage",
+            "default": false
+          }
+        },
+        "itemTextColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color for the card's text.",
+            "label": "Text Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "itemFillColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color for the card's fill.",
+            "label": "Fill Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "itemFillHoverColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color for the card's fill, on mouse hover.",
+            "label": "Fill Hover Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "itemStrokeSize": {
           "control": "core/controls/stepper",
           "options": {
-            "help_text": "Set the radius of the item.",
-            "label": "Items Radius",
-            "default": 0,
+            "help_text": "Select the thickness for the card's stroke.",
+            "label": "Stroke Thickness",
+            "default": 2,
             "unit": " px",
             "min": 0,
             "max": 100
+          }
+        },
+        "itemStrokeColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color for the card's stroke.",
+            "label": "Stroke Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "itemStrokeHoverColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color for the card's stroke, on mouse hover.",
+            "label": "Stroke Hover Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "votesPrimaryColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color of votes level.",
+            "label": "Votes Color",
+            "default": "#c9cdcf"
+          }
+        },
+        "votesSecondaryColor": {
+          "control": "core/controls/color",
+          "options": {
+            "help_text": "Select the color of voted card level.",
+            "label": "Voted Color",
+            "default": "#c9cdcf"
           }
         }
       }
@@ -338,15 +391,21 @@
       "backgroundColor": "rgb(255, 255, 255)",
       "borderSize": 5,
       "borderRadius": 5,
-      "layout": "grid",
+      "layout": "cards",
       "widgetPadding": 10,
       "elementsPadding": 15,
       "displayVotesNumber": true,
+      "itemsPadding": 4,
+      "displayLabel": true,
       "displayPercentage": true,
+      "itemTextColor": "#333333",
+      "itemFillColor": "rgba(201,205,207,0.2)",
+      "itemStrokeColor": "rgba(201,205,207,0.2)",
+      "itemStrokeSize": 2,
+      "itemFillHoverColor": "#dbffe6",
+      "itemStrokeHoverColor": "#35e66c",
       "votesPrimaryColor": "#c9cdcf",
       "votesSecondaryColor": "#35e66c",
-      "itemsPadding": 4,
-      "itemRadius": 5,
       "textFont": {
         "family": "Lato",
         "style": "300",
@@ -363,15 +422,21 @@
       "backgroundColor": "rgb(255, 244, 255)",
       "borderSize": 5,
       "borderRadius": 0,
-      "layout": "grid",
+      "layout": "slider",
       "widgetPadding": 20,
       "elementsPadding": 15,
       "displayVotesNumber": true,
+      "itemsPadding": 4,
+      "displayLabel": true,
       "displayPercentage": false,
+      "itemTextColor": "#333333",
+      "itemFillColor": "#c9cdcf",
+      "itemStrokeColor": "#c9cdcf",
+      "itemStrokeSize": 2,
+      "itemFillHoverColor": "#dbffe6",
+      "itemStrokeHoverColor": "#35e66c",
       "votesPrimaryColor": "#c9cdcf",
       "votesSecondaryColor": "#35e66c",
-      "itemsPadding": 4,
-      "itemRadius": 0,
       "textFont": {
         "family": "Lato",
         "style": "300",
@@ -383,8 +448,9 @@
     }
   ],
   "slug": "Emoji Poll",
-  "tags": { "1": "vote, emoji slider, quiz, survey" },
+  "tags": { "1": "vote", "2": "emoji", "3": "quiz", "4": "survey" },
   "width": 530,
   "height": 300,
-  "version": "364c5eb"
+  "version": "50c95a0"
 }
+
