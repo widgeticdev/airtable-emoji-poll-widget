@@ -129,7 +129,13 @@ function EmojiPollBlock(props) {
       fields.forEach((field) => {
         if (field != "Answer" && field != "Emoji Icon") {
           const key = translator[field];
-          contentItem[key] = relevantDetail.getCellValueAsString(field);
+          if (field === "Vote Deadline") {
+            contentItem[key] = relevantDetail
+              .getCellValueAsString(field)
+              .replace(/-/g, "/");
+          } else {
+            contentItem[key] = relevantDetail.getCellValueAsString(field);
+          }
         }
       });
     }
