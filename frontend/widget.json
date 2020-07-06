@@ -187,36 +187,6 @@
     "colorAttributes": ["backgroundColor", "textFillColor, linkFillColor"],
     "tabs": {
       "Interface": {
-        "backgroundColor": {
-          "control": "core/controls/color",
-          "options": {
-            "help_text": "Select the color and transparency for the widget's background.",
-            "label": "Background Color",
-            "default": "#FFFFFF"
-          }
-        },
-        "borderSize": {
-          "control": "core/controls/stepper",
-          "options": {
-            "help_text": "Set the border thickness.",
-            "label": "Border Thickness",
-            "default": 0,
-            "unit": " px",
-            "min": 0,
-            "max": 100
-          }
-        },
-        "borderRadius": {
-          "control": "core/controls/stepper",
-          "options": {
-            "help_text": "Set the radius of the border.",
-            "label": "Border Radius",
-            "default": 0,
-            "unit": " px",
-            "min": 0,
-            "max": 100
-          }
-        },
         "widgetPadding": {
           "control": "core/controls/stepper",
           "options": {
@@ -441,4 +411,3 @@
   "height": 300,
   "version": "50c95a0"
 }
-
