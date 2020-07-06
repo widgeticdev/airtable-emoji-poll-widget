@@ -79,7 +79,6 @@
           "help_text": "Add an emoji to the vote option.",
           "default": "",
           "options": [
-            { "label": "Empty", "value": "" },
             {
               "label": "Angry",
               "value": "https://files.widgetic.com/file/widgetic-uploads/assets/widgets/emoji-poll/whatsapp/emoji_11_angry.svg"
