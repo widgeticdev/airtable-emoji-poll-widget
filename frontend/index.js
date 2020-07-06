@@ -177,8 +177,8 @@ const retrieveCompositionId = async () => {
   return compId;
 };
 loadScriptFromURLAsync("https://cdn.jsdelivr.net/npm/@widgetic/sdk/lib/sdk.js")
-  .then(() => setupTables())
   .then(() => retrieveCompositionId())
+  .then((compositionId) => setupTables(compositionId))
   .then((compositionId) => {
     if (!globalConfig.get("skin")) {
       globalConfig.setAsync("skin", skins[0]);

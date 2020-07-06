@@ -4,10 +4,11 @@ import { contentMeta, content as demoContent } from "./widget.json";
 import { FieldType } from "@airtable/blocks/models";
 import { base } from "@airtable/blocks";
 const { generateField } = helper;
-const setupTables = async () => {
+const setupTables = async (compositionId) => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
   const detailsTable = base.getTableByNameIfExists("Details");
+  const resultsTable = base.getTableByNameIfExists("Results");
 
   let translator = {};
   Object.keys(contentMeta.attributes).forEach((attribute) => {
@@ -74,6 +75,30 @@ const setupTables = async () => {
       detailsTable.createRecordAsync(record);
     }
   }
+  if (!resultsTable) {
+    const name = "Results";
+    const fields = [
+      {
+        name: "Title",
+        type: FieldType.SINGLE_LINE_TEXT,
+      },
+      {
+        name: "Link",
+        type: FieldType.URL,
+      },
+    ];
+    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
+      await base.unstable_createTableAsync(name, fields);
+      const resultsTable = base.getTableByName("Results");
+      resultsTable.createRecordAsync({
+        Title: "Link",
+        Link: `https://airtable.widgetic.com/results/download/${compositionId}`,
+      });
+    } else {
+      alert("Not allowed");
+    }
+  }
+  return compositionId;
 };
 
 export default setupTables;
