@@ -76,6 +76,7 @@ class EmojiPoll extends React.Component {
           }}
         ></div>
         <Editor
+          done={this.props.done}
           visible={this.props.isEditorVisible}
           skinMeta={skinMeta}
           setSkin={this.setSkin}
@@ -140,9 +141,14 @@ function EmojiPollBlock(props) {
     }
   });
 
+  const done = () => {
+    viewport.exitFullscreen();
+  };
+
   // Block HTML template
   return (
     <EmojiPoll
+      done={done}
       compId={compId}
       isEditorVisible={editorVisible}
       content={content}

@@ -4,7 +4,7 @@ import { Box, Heading, Button } from "@airtable/blocks/ui";
 import InputController from "./InputController";
 
 function Editor(props) {
-  const { setSkin } = props;
+  const { setSkin, done } = props;
   const generateTab = (generateOnChange, tabs, tabName, controls, index) => {
     let noTabs = Object.keys(tabs).length;
     const separator =
@@ -19,7 +19,6 @@ function Editor(props) {
       ) : (
         <></>
       );
-    // console.log("generateTab:", index, noTabs, separator);
     // tab is an object straight out of widget skinMeta
     return (
       <Box key={parseInt(index)} width="100%">
@@ -124,7 +123,7 @@ function Editor(props) {
           borderWidth="1px"
           marginBottom=".5rem"
         ></Box>
-        <Button variant="primary" onClick={() => console.log("Button clicked")}>
+        <Button variant="primary" onClick={done}>
           Done
         </Button>
       </Box>
