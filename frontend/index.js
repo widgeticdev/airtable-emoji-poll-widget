@@ -29,7 +29,7 @@ class EmojiPoll extends React.Component {
   componentDidMount() {
     const skin = globalConfig.get("skin");
     const target = document.getElementById(globalConfig.get("id"));
-    console.log("the passed props", this.props.content);
+    // console.log("the passed props", this.props.content);
     const { content } = this.props;
     const composition = window.Widgetic.UI.composition(
       target,
@@ -48,7 +48,7 @@ class EmojiPoll extends React.Component {
       JSON.stringify(previousContent.content) !=
       JSON.stringify(this.props.content)
     ) {
-      console.log("update props called");
+      // console.log("update props called");
       this.state.composition.setContent(this.props.content);
     }
     // console.log("the composition is ", this.state.composition.api.content);
@@ -140,7 +140,7 @@ function EmojiPollBlock(props) {
     contentItem.order = index + 1;
     return contentItem;
   });
-  console.log(content);
+  // console.log("Content on block Constructor:", content);
 
   // Block fulscreen button
   viewport.watch("isFullscreen", function (viewport) {

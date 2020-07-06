@@ -30,7 +30,7 @@ const InputController = (props) => {
       const FontSizeInput = () => {
         const [value, setValue] = useState(currentValue);
         return (
-          <input
+          <Input
             type="number"
             min="0"
             max="100"
