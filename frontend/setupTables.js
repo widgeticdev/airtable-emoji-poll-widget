@@ -8,6 +8,7 @@ const setupTables = async () => {
   // create the tables
   const contentTable = base.getTableByNameIfExists("Content");
   const detailsTable = base.getTableByNameIfExists("Details");
+  const resultsTable = base.getTableByNameIfExists("Results");
 
   let translator = {};
   Object.keys(contentMeta.attributes).forEach((attribute) => {
@@ -72,6 +73,24 @@ const setupTables = async () => {
       console.log("going into the details table", record);
       const detailsTable = base.getTableByName("Details");
       detailsTable.createRecordAsync(record);
+    }
+  }
+  if (!resultsTable) {
+    const name = "Results";
+    const fields = [
+      {
+        name: "Title",
+        type: FieldType.SINGLE_LINE_TEXT,
+      },
+      {
+        name: "Link",
+        type: FieldType.URL,
+      },
+    ];
+    if (base.unstable_hasPermissionToCreateTable(name, fields)) {
+      await base.unstable_createTableAsync(name, fields);
+    } else {
+      alert("Not allowed");
     }
   }
 };
